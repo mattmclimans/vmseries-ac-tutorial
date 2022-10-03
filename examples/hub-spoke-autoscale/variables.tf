@@ -95,7 +95,6 @@ variable "create_spoke_networks" {
   default     = false
 }
 
-
 variable "cidr_spoke1" {
   description = "The CIDR range of the management subnetwork."
   type        = string
@@ -106,18 +105,6 @@ variable "cidr_spoke2" {
   description = "The CIDR range of the spoke1 subnetwork."
   type        = string
   default     = null
-}
-
-variable "spoke_vm_type" {
-  description = "The GCP machine type for the compute instances in the spoke networks."
-  type        = string
-  default     = "f1-micro"
-}
-
-variable "spoke_vm_image" {
-  description = "The image path for the compute instances deployed in the spoke networks."
-  type        = string
-  default     = "https://www.googleapis.com/compute/v1/projects/panw-gcp-team-testing/global/images/ubuntu-2004-lts-apache"
 }
 
 variable "spoke_vm_user" {

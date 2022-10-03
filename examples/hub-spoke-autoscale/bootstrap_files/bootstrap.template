@@ -1,23 +1,14 @@
 <?xml version="1.0"?>
-<config detail-version="10.1.0" urldb="paloaltonetworks" version="10.1.0">
+<config detail-version="10.1.4" urldb="paloaltonetworks" version="10.1.0">
   <mgt-config>
     <users>
       <entry name="admin">
-        <phash>$5$rbrgdlse$PkSGGK7rdfwq7o5nN0r7rgEhWY7e0MVKTvRSHblw2.6</phash>
         <permissions>
           <role-based>
             <superuser>yes</superuser>
           </role-based>
         </permissions>
-        <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FDNnZmV3V4T0lWa2ZjRUhsQTk2alc1czZFRHhteWMzdERJZnV1UmlCNUFDVVhscUR1clVWZGJTWG9lUDk0UjVxMm8yaWc3OWtyQVE1akYrcHVxNDkvRno4U1hZTE9jcnpjcXBQOHg5Z010K1ExT0RRQUNPdU1FN1QyOEQ5NUg4eTg5OHprWHJnRTJmWWRBM1FWUGRGYi9yRm5EWjdCZ2JtOWxaNysySERIZjZGT0NGa2pVZWg5cjMyd3lKY3hiQXljTmxEbElISmxKRXpVQlpZQkVjZ0pUMzJVZGxpZExTTmtub3ZTVUl5OCtRdkExditoU3NnMFMyb0cwUkE2bnpIcTUxU3ZBUlRjNjNTTUhhM0J2NHcxbXlIMldSOEIrU1pWQjNHTGE4UDlEODlvNlBEZlJRVlRmeE85ZUpXT1g5aU1pTjREdjBJV1ZWa3FGU1JUeklFdzE0czRjVWNUREV3WE1OM2tKRFUrM3lhMzZiWnFGNm9tWEk5eXQ4UXpyRmVvbDY3djYxRHVqcC9ROGREcjJPTXh6ZmNVcElPZElCaFFCQ0pyL1NGOXRTbHh1RVp1cHJ5eXZnN3d4WEdYcVc4ekswZnUycmdNTTJpQWpibGpPclQzV1lBaFc1bTEwR1Y2dGlFM2hONlEvcW9VQ1JnZXU0Tm9yOHo5Wm91YkpJaGM9IGdjcC1kZW1v</public-key>
-      </entry>
-      <entry name="paloalto">
-        <permissions>
-          <role-based>
-            <superuser>yes</superuser>
-          </role-based>
-        </permissions>
-        <phash>$5$qhsatwjn$eSbYN/l9Vl1V/xDwrfNHIISNPiUnqNrSmWMif4OEMRD</phash>
+        <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FETU9Vb3pka3FESjUxK3pGU0ZxOG85YzN0NEY0N1V2ZDFBa2hmUE1IZkxUR0Z3aUE5aGVmOEw5cGN5TmdLbmlzcEoxc1ZISGFLcGpBcjc0RTE1OVVRQndhaURZL3JaUlZXYmZkYkhYSlJmQmpndTRYelp0Tk0rQUV2eUVQd0Y1c3lZQk1uT2I2US9YN0g5eXBDVVkrc0FJaU5oMHdKZmc0SHlmbXJjZjdBa0xmS2lUYmlMWlNZSUJiUkJrWmt0VXUvZVUxSUpUYjZZczNKMDdCajhKdjAzRFBCWERsM3F6bHRabFdlTGFJZ3FqaU9MUjIyZG9INXZBZTBQVndSRENFMUNWbjdKV3M4L29VN0t1dmVVVlJ3dnNKUFN5Y09hUTMyeUxEWGFJTW1SOVdjS0JUWVdiSC9WdjFwTVVoRzI2RzhNOVdsdWl5cDBmL0lZYm8ycExIbXBYdnk5UkRNQ05kcUJYby9GUjZlM09uRTdYNDJsV0NVWWhBOStkMzgrdTRiQ2YxdlpOQ1l6THVUclRFU0JiSWIzeWtCc0x6ZXJjdllhbU1WakxQRkpQWHM4bFQ3MFdveDZYU0h6VjZab2pBTm5jSEpCbUx5NDBFbGx5MjZ0ajk4Nk05enpHV3RuemVHN0RhNDlGMXFlbzY5MmZ5OTh6a09NbzgyalI5RU5wS009IG1tY2xpbWFuc0BNYXR0aGV3cy1NYWMtbWluaS5sb2NhbA==</public-key>
       </entry>
     </users>
     <password-complexity>
@@ -472,12 +463,10 @@
           <update-schedule>
             <threats>
               <recurring>
-                <weekly>
-                  <day-of-week>wednesday</day-of-week>
-                  <at>01:02</at>
+                <every-30-mins>
+                  <at>0</at>
                   <action>download-and-install</action>
-                  <disable-new-content>yes</disable-new-content>
-                </weekly>
+                </every-30-mins>
               </recurring>
             </threats>
             <anti-virus>
@@ -488,6 +477,11 @@
                 </hourly>
               </recurring>
             </anti-virus>
+            <wildfire>
+              <recurring>
+                <real-time/>
+              </recurring>
+            </wildfire>
           </update-schedule>
           <timezone>US/Pacific</timezone>
           <service>
@@ -497,8 +491,8 @@
           <hostname>PA-VM</hostname>
           <dns-setting>
             <servers>
-              <primary>8.8.8.8</primary>
-              <secondary>4.2.2.2</secondary>
+              <primary>169.254.169.254</primary>
+              <secondary>8.8.8.8</secondary>
             </servers>
           </dns-setting>
         </system>
@@ -509,7 +503,7 @@
           <management>
             <hostname-type-in-syslog>FQDN</hostname-type-in-syslog>
             <initcfg>
-              <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FDNnZmV3V4T0lWa2ZjRUhsQTk2alc1czZFRHhteWMzdERJZnV1UmlCNUFDVVhscUR1clVWZGJTWG9lUDk0UjVxMm8yaWc3OWtyQVE1akYrcHVxNDkvRno4U1hZTE9jcnpjcXBQOHg5Z010K1ExT0RRQUNPdU1FN1QyOEQ5NUg4eTg5OHprWHJnRTJmWWRBM1FWUGRGYi9yRm5EWjdCZ2JtOWxaNysySERIZjZGT0NGa2pVZWg5cjMyd3lKY3hiQXljTmxEbElISmxKRXpVQlpZQkVjZ0pUMzJVZGxpZExTTmtub3ZTVUl5OCtRdkExditoU3NnMFMyb0cwUkE2bnpIcTUxU3ZBUlRjNjNTTUhhM0J2NHcxbXlIMldSOEIrU1pWQjNHTGE4UDlEODlvNlBEZlJRVlRmeE85ZUpXT1g5aU1pTjREdjBJV1ZWa3FGU1JUeklFdzE0czRjVWNUREV3WE1OM2tKRFUrM3lhMzZiWnFGNm9tWEk5eXQ4UXpyRmVvbDY3djYxRHVqcC9ROGREcjJPTXh6ZmNVcElPZElCaFFCQ0pyL1NGOXRTbHh1RVp1cHJ5eXZnN3d4WEdYcVc4ekswZnUycmdNTTJpQWpibGpPclQzV1lBaFc1bTEwR1Y2dGlFM2hONlEvcW9VQ1JnZXU0Tm9yOHo5Wm91YkpJaGM9IGdjcC1kZW1v</public-key>
+              <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FETU9Vb3pka3FESjUxK3pGU0ZxOG85YzN0NEY0N1V2ZDFBa2hmUE1IZkxUR0Z3aUE5aGVmOEw5cGN5TmdLbmlzcEoxc1ZISGFLcGpBcjc0RTE1OVVRQndhaURZL3JaUlZXYmZkYkhYSlJmQmpndTRYelp0Tk0rQUV2eUVQd0Y1c3lZQk1uT2I2US9YN0g5eXBDVVkrc0FJaU5oMHdKZmc0SHlmbXJjZjdBa0xmS2lUYmlMWlNZSUJiUkJrWmt0VXUvZVUxSUpUYjZZczNKMDdCajhKdjAzRFBCWERsM3F6bHRabFdlTGFJZ3FqaU9MUjIyZG9INXZBZTBQVndSRENFMUNWbjdKV3M4L29VN0t1dmVVVlJ3dnNKUFN5Y09hUTMyeUxEWGFJTW1SOVdjS0JUWVdiSC9WdjFwTVVoRzI2RzhNOVdsdWl5cDBmL0lZYm8ycExIbXBYdnk5UkRNQ05kcUJYby9GUjZlM09uRTdYNDJsV0NVWWhBOStkMzgrdTRiQ2YxdlpOQ1l6THVUclRFU0JiSWIzeWtCc0x6ZXJjdllhbU1WakxQRkpQWHM4bFQ3MFdveDZYU0h6VjZab2pBTm5jSEpCbUx5NDBFbGx5MjZ0ajk4Nk05enpHV3RuemVHN0RhNDlGMXFlbzY5MmZ5OTh6a09NbzgyalI5RU5wS009IG1tY2xpbWFuc0BNYXR0aGV3cy1NYWMtbWluaS5sb2NhbA==</public-key>
               <type>
                 <dhcp-client>
                   <send-hostname>yes</send-hostname>
@@ -518,14 +512,14 @@
                   <accept-dhcp-domain>no</accept-dhcp-domain>
                 </dhcp-client>
               </type>
-              <dns-primary>8.8.8.8</dns-primary>
-              <dns-secondary>169.254.169.254</dns-secondary>
+              <dns-primary>169.254.169.254</dns-primary>
+              <dns-secondary>8.8.8.8</dns-secondary>
               <op-command-modes>mgmt-interface-swap</op-command-modes>
             </initcfg>
           </management>
         </setting>
         <plugins>
-          <vm_series>
+          <vm_series version="2.1.5">
             <gcp-cloudwatch>
               <enabled>yes</enabled>
               <update-interval>1</update-interval>
@@ -575,12 +569,49 @@
                 </tcp>
               </protocol>
             </entry>
+            <entry name="tcp-8080">
+              <protocol>
+                <tcp>
+                  <port>80</port>
+                  <override>
+                    <no/>
+                  </override>
+                </tcp>
+              </protocol>
+            </entry>
           </service>
           <service-group/>
           <schedule/>
           <rulebase>
             <nat>
               <rules>
+                <entry name="inbound-jenkins" uuid="e74fe55d-8bda-4767-b092-5488fec2faa8">
+                  <source-translation>
+                    <dynamic-ip-and-port>
+                      <interface-address>
+                        <interface>ethernet1/2</interface>
+                      </interface-address>
+                    </dynamic-ip-and-port>
+                  </source-translation>
+                  <dynamic-destination-translation>
+                    <translated-address>spoke1-vm1</translated-address>
+                  </dynamic-destination-translation>
+                  <to>
+                    <member>untrust</member>
+                  </to>
+                  <from>
+                    <member>untrust</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <service>service-http</service>
+                  <description>Inbound DNAT/SNAT policy to spoke1 internal LB for web server farm.</description>
+                  <to-interface>ethernet1/1</to-interface>
+                </entry>
                 <entry name="inbound-web" uuid="a9e71d77-b965-4794-a5ba-aa425baea956">
                   <source-translation>
                     <dynamic-ip-and-port>
@@ -715,6 +746,28 @@
                     <member>any</member>
                   </destination-hip>
                   <action>allow</action>
+                  <profile-setting>
+                    <profiles>
+                      <url-filtering>
+                        <member>alert-all</member>
+                      </url-filtering>
+                      <file-blocking>
+                        <member>alert-all</member>
+                      </file-blocking>
+                      <spyware>
+                        <member>alert-all</member>
+                      </spyware>
+                      <vulnerability>
+                        <member>alert-all</member>
+                      </vulnerability>
+                      <wildfire-analysis>
+                        <member>default</member>
+                      </wildfire-analysis>
+                      <virus>
+                        <member>default</member>
+                      </virus>
+                    </profiles>
+                  </profile-setting>
                 </entry>
                 <entry name="inbound-ssh" uuid="07540d6a-b059-40f4-a185-36c57ec4d7e1">
                   <to>
@@ -748,41 +801,28 @@
                     <member>any</member>
                   </destination-hip>
                   <action>allow</action>
-                </entry>
-                <entry name="health-probe" uuid="650b505d-d106-4e15-b1fb-24f2baf88946">
-                  <to>
-                    <member>trust</member>
-                  </to>
-                  <from>
-                    <member>trust</member>
-                  </from>
-                  <source>
-                    <member>google-probes</member>
-                  </source>
-                  <destination>
-                    <member>any</member>
-                  </destination>
-                  <source-user>
-                    <member>any</member>
-                  </source-user>
-                  <category>
-                    <member>any</member>
-                  </category>
-                  <application>
-                    <member>any</member>
-                  </application>
-                  <service>
-                    <member>application-default</member>
-                  </service>
-                  <source-hip>
-                    <member>any</member>
-                  </source-hip>
-                  <destination-hip>
-                    <member>any</member>
-                  </destination-hip>
-                  <action>allow</action>
-                  <rule-type>universal</rule-type>
-                  <description>Security policy to allow Google load balancer health probes to the VM-Series.</description>
+                  <profile-setting>
+                    <profiles>
+                      <url-filtering>
+                        <member>alert-all</member>
+                      </url-filtering>
+                      <file-blocking>
+                        <member>alert-all</member>
+                      </file-blocking>
+                      <virus>
+                        <member>default</member>
+                      </virus>
+                      <spyware>
+                        <member>alert-all</member>
+                      </spyware>
+                      <vulnerability>
+                        <member>alert-all</member>
+                      </vulnerability>
+                      <wildfire-analysis>
+                        <member>default</member>
+                      </wildfire-analysis>
+                    </profiles>
+                  </profile-setting>
                 </entry>
                 <entry name="east-west" uuid="8b47fd96-dcee-4b01-bda8-8f45d4d8ce48">
                   <to>
@@ -820,6 +860,28 @@
                   <action>allow</action>
                   <rule-type>universal</rule-type>
                   <description>Generic security policy to allow all east-west traffic between the spoke VPC networks. </description>
+                  <profile-setting>
+                    <profiles>
+                      <url-filtering>
+                        <member>alert-all</member>
+                      </url-filtering>
+                      <file-blocking>
+                        <member>alert-all</member>
+                      </file-blocking>
+                      <spyware>
+                        <member>alert-all</member>
+                      </spyware>
+                      <vulnerability>
+                        <member>alert-all</member>
+                      </vulnerability>
+                      <wildfire-analysis>
+                        <member>default</member>
+                      </wildfire-analysis>
+                      <virus>
+                        <member>default</member>
+                      </virus>
+                    </profiles>
+                  </profile-setting>
                 </entry>
                 <entry name="outbound" uuid="ccfeb1ac-b5e2-41d9-a6c9-d79f8d2bf65f">
                   <to>
@@ -861,6 +923,63 @@
                   <action>allow</action>
                   <rule-type>universal</rule-type>
                   <description>Generic security policy to allow outbound internet traffic from the spoke VPC networks.</description>
+                  <profile-setting>
+                    <profiles>
+                      <url-filtering>
+                        <member>alert-all</member>
+                      </url-filtering>
+                      <file-blocking>
+                        <member>alert-all</member>
+                      </file-blocking>
+                      <spyware>
+                        <member>alert-all</member>
+                      </spyware>
+                      <vulnerability>
+                        <member>alert-all</member>
+                      </vulnerability>
+                      <wildfire-analysis>
+                        <member>default</member>
+                      </wildfire-analysis>
+                      <virus>
+                        <member>default</member>
+                      </virus>
+                    </profiles>
+                  </profile-setting>
+                </entry>
+                <entry name="health-probe" uuid="650b505d-d106-4e15-b1fb-24f2baf88946">
+                  <to>
+                    <member>trust</member>
+                  </to>
+                  <from>
+                    <member>trust</member>
+                  </from>
+                  <source>
+                    <member>google-probes</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>any</member>
+                  </application>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <source-hip>
+                    <member>any</member>
+                  </source-hip>
+                  <destination-hip>
+                    <member>any</member>
+                  </destination-hip>
+                  <action>allow</action>
+                  <rule-type>universal</rule-type>
+                  <description>Security policy to allow Google load balancer health probes to the VM-Series.</description>
                 </entry>
                 <entry name="all-ping" uuid="3ac87aef-a4fd-4cad-841d-a55edd4f66a9">
                   <to>
@@ -995,6 +1114,213 @@
               </tag>
             </entry>
           </address-group>
+          <profiles>
+            <vulnerability>
+              <entry name="alert-all">
+                <rules>
+                  <entry name="alert-all">
+                    <action>
+                      <alert/>
+                    </action>
+                    <vendor-id>
+                      <member>any</member>
+                    </vendor-id>
+                    <severity>
+                      <member>any</member>
+                    </severity>
+                    <cve>
+                      <member>any</member>
+                    </cve>
+                    <threat-name>any</threat-name>
+                    <host>any</host>
+                    <category>any</category>
+                    <packet-capture>disable</packet-capture>
+                  </entry>
+                </rules>
+              </entry>
+            </vulnerability>
+            <spyware>
+              <entry name="alert-all">
+                <botnet-domains>
+                  <lists>
+                    <entry name="default-paloalto-dns">
+                      <action>
+                        <sinkhole/>
+                      </action>
+                      <packet-capture>disable</packet-capture>
+                    </entry>
+                  </lists>
+                  <dns-security-categories>
+                    <entry name="pan-dns-sec-cc">
+                      <log-level>default</log-level>
+                      <action>default</action>
+                      <packet-capture>disable</packet-capture>
+                    </entry>
+                    <entry name="pan-dns-sec-ddns">
+                      <log-level>default</log-level>
+                      <action>default</action>
+                      <packet-capture>disable</packet-capture>
+                    </entry>
+                    <entry name="pan-dns-sec-grayware">
+                      <log-level>default</log-level>
+                      <action>default</action>
+                      <packet-capture>disable</packet-capture>
+                    </entry>
+                    <entry name="pan-dns-sec-malware">
+                      <log-level>default</log-level>
+                      <action>default</action>
+                      <packet-capture>disable</packet-capture>
+                    </entry>
+                    <entry name="pan-dns-sec-parked">
+                      <log-level>default</log-level>
+                      <action>default</action>
+                      <packet-capture>disable</packet-capture>
+                    </entry>
+                    <entry name="pan-dns-sec-phishing">
+                      <log-level>default</log-level>
+                      <action>default</action>
+                      <packet-capture>disable</packet-capture>
+                    </entry>
+                    <entry name="pan-dns-sec-proxy">
+                      <log-level>default</log-level>
+                      <action>default</action>
+                      <packet-capture>disable</packet-capture>
+                    </entry>
+                    <entry name="pan-dns-sec-recent">
+                      <log-level>default</log-level>
+                      <action>default</action>
+                      <packet-capture>disable</packet-capture>
+                    </entry>
+                  </dns-security-categories>
+                  <sinkhole>
+                    <ipv4-address>pan-sinkhole-default-ip</ipv4-address>
+                    <ipv6-address>::1</ipv6-address>
+                  </sinkhole>
+                </botnet-domains>
+                <rules>
+                  <entry name="alert-all">
+                    <action>
+                      <alert/>
+                    </action>
+                    <severity>
+                      <member>any</member>
+                    </severity>
+                    <threat-name>any</threat-name>
+                    <category>any</category>
+                    <packet-capture>disable</packet-capture>
+                  </entry>
+                </rules>
+              </entry>
+            </spyware>
+            <url-filtering>
+              <entry name="alert-all">
+                <credential-enforcement>
+                  <mode>
+                    <disabled/>
+                  </mode>
+                  <log-severity>medium</log-severity>
+                </credential-enforcement>
+                <mlav-engine-urlbased-enabled>
+                  <entry name="Javascript Exploit Detection">
+                    <mlav-policy-action>allow</mlav-policy-action>
+                  </entry>
+                  <entry name="Phishing Detection">
+                    <mlav-policy-action>allow</mlav-policy-action>
+                  </entry>
+                </mlav-engine-urlbased-enabled>
+                <alert>
+                  <member>abortion</member>
+                  <member>abused-drugs</member>
+                  <member>adult</member>
+                  <member>alcohol-and-tobacco</member>
+                  <member>auctions</member>
+                  <member>business-and-economy</member>
+                  <member>command-and-control</member>
+                  <member>computer-and-internet-info</member>
+                  <member>content-delivery-networks</member>
+                  <member>copyright-infringement</member>
+                  <member>cryptocurrency</member>
+                  <member>dating</member>
+                  <member>dynamic-dns</member>
+                  <member>educational-institutions</member>
+                  <member>entertainment-and-arts</member>
+                  <member>extremism</member>
+                  <member>financial-services</member>
+                  <member>gambling</member>
+                  <member>games</member>
+                  <member>government</member>
+                  <member>grayware</member>
+                  <member>hacking</member>
+                  <member>health-and-medicine</member>
+                  <member>high-risk</member>
+                  <member>home-and-garden</member>
+                  <member>hunting-and-fishing</member>
+                  <member>insufficient-content</member>
+                  <member>internet-communications-and-telephony</member>
+                  <member>internet-portals</member>
+                  <member>job-search</member>
+                  <member>legal</member>
+                  <member>low-risk</member>
+                  <member>malware</member>
+                  <member>medium-risk</member>
+                  <member>military</member>
+                  <member>motor-vehicles</member>
+                  <member>music</member>
+                  <member>newly-registered-domain</member>
+                  <member>news</member>
+                  <member>not-resolved</member>
+                  <member>nudity</member>
+                  <member>online-storage-and-backup</member>
+                  <member>parked</member>
+                  <member>peer-to-peer</member>
+                  <member>personal-sites-and-blogs</member>
+                  <member>philosophy-and-political-advocacy</member>
+                  <member>phishing</member>
+                  <member>proxy-avoidance-and-anonymizers</member>
+                  <member>questionable</member>
+                  <member>real-estate</member>
+                  <member>real-time-detection</member>
+                  <member>recreation-and-hobbies</member>
+                  <member>reference-and-research</member>
+                  <member>religion</member>
+                  <member>search-engines</member>
+                  <member>sex-education</member>
+                  <member>shareware-and-freeware</member>
+                  <member>shopping</member>
+                  <member>social-networking</member>
+                  <member>society</member>
+                  <member>sports</member>
+                  <member>stock-advice-and-tools</member>
+                  <member>streaming-media</member>
+                  <member>swimsuits-and-intimate-apparel</member>
+                  <member>training-and-tools</member>
+                  <member>translation</member>
+                  <member>travel</member>
+                  <member>unknown</member>
+                  <member>weapons</member>
+                  <member>web-advertisements</member>
+                  <member>web-based-email</member>
+                  <member>web-hosting</member>
+                </alert>
+              </entry>
+            </url-filtering>
+            <file-blocking>
+              <entry name="alert-all">
+                <rules>
+                  <entry name="alert-all">
+                    <application>
+                      <member>any</member>
+                    </application>
+                    <file-type>
+                      <member>any</member>
+                    </file-type>
+                    <direction>both</direction>
+                    <action>alert</action>
+                  </entry>
+                </rules>
+              </entry>
+            </file-blocking>
+          </profiles>
         </entry>
       </vsys>
     </entry>

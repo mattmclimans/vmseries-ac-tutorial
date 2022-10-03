@@ -70,6 +70,13 @@ module "vpc_spoke2" {
       next_hop_ilb      = module.lb_internal.address
       #next_hop_internet = "true"
       #tags             = "egress-inet"
+    },
+    {
+      name              = "delete-me"
+      description       = "Default route to VM-Series NGFW"
+      destination_range = "74.97.22.59/32"
+      next_hop_internet = "true"
+      #tags             = "egress-inet"
     }
   ]
 
@@ -130,7 +137,7 @@ resource "google_compute_network_peering" "trust_to_spoke2" {
 resource "google_compute_instance" "spoke1_vm" {
   count                     = (var.create_spoke_networks ? 1 : 0)
   name                      = "${local.prefix}spoke1-vm${count.index + 1}"
-  machine_type              = var.spoke_vm_type
+  machine_type              = "n2-standard-2"
   zone                      = data.google_compute_zones.main.names[0]
   can_ip_forward            = false
   allow_stopping_for_update = true
@@ -147,7 +154,7 @@ resource "google_compute_instance" "spoke1_vm" {
 
   boot_disk {
     initialize_params {
-      image = var.spoke_vm_image
+      image = "https://www.googleapis.com/compute/v1/projects/panw-gcp-team-testing/global/images/ubuntu-2004-lts-jenkins-key"
     }
   }
 
@@ -159,7 +166,7 @@ resource "google_compute_instance" "spoke1_vm" {
 resource "google_compute_instance" "spoke2_vm1" {
   count                     = (var.create_spoke_networks ? 1 : 0)
   name                      = "${local.prefix}spoke2-vm1"
-  machine_type              = var.spoke_vm_type
+  machine_type              = "f1-micro"
   zone                      = data.google_compute_zones.main.names[0]
   can_ip_forward            = false
   allow_stopping_for_update = true
@@ -172,11 +179,13 @@ resource "google_compute_instance" "spoke2_vm1" {
   network_interface {
     subnetwork = module.vpc_spoke2[0].subnets_self_links[0]
     network_ip = cidrhost(var.cidr_spoke2, 10)
+    access_config {}
   }
 
   boot_disk {
     initialize_params {
-      image = var.spoke_vm_image
+      image = "https://www.googleapis.com/compute/v1/projects/panw-gcp-team-testing/global/images/ubuntu-2004-lts-apache-key"
+      #image = var.spoke_vm_image
     }
   }
 

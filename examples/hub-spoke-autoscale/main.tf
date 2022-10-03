@@ -132,6 +132,16 @@ module "iam_service_account" {
   service_account_id = "${local.prefix}vmseries-mig-sa"
 }
 
+# Download bootstrap files to bootstrap_files directory.
+module "download_content" {
+  source  = "terraform-google-modules/gcloud/google"
+  version = "~> 3.0.1"
+
+  platform              = "linux"
+  create_cmd_entrypoint = "gsutil"
+  create_cmd_body       = "cp -r gs://vmseries-arch-center-tutorial-09282022/content ${path.module}/bootstrap_files"
+}
+
 # Retrieve the hub subnet ID.
 data "google_compute_subnetwork" "trust" {
   self_link = module.vpc_trust.subnets_self_links[0]
@@ -161,26 +171,25 @@ module "bootstrap" {
   source          = "PaloAltoNetworks/vmseries-modules/google//modules/bootstrap"
   service_account = module.iam_service_account.email
   files = {
-    "bootstrap_files/init-cfg.txt"  = "config/init-cfg.txt"
-    "bootstrap_files/bootstrap.xml" = "config/bootstrap.xml"
+    "bootstrap_files/init-cfg.txt"                           = "config/init-cfg.txt"
+    "bootstrap_files/bootstrap.xml"                          = "config/bootstrap.xml"
+    "bootstrap_files/content/panupv2-all-contents-8622-7593" = "content/panupv2-all-contents-8622-7593"
+    "bootstrap_files/content/panup-all-antivirus-4222-4735" = "content/panup-all-antivirus-4222-4735"
+    "bootstrap_files/content/panupv3-all-wildfire-703414-706774" = "content/panupv3-all-wildfire-703414-706774"
   }
 
   depends_on = [
-    local_file.bootstrap
+    local_file.bootstrap,
+    module.download_content
   ]
 }
 
-module "autoscale" {
-  source = "github.com/PaloAltoNetworks/terraform-google-vmseries-modules//modules/autoscale?ref=autoscale_regional_migs"
-  # source = "/Users/mmclimans/Desktop/vmseries-tutorial/modules/autoscale"
-
-  zones = {
-    zone1 = data.google_compute_zones.main.names[0]
-    zone2 = data.google_compute_zones.main.names[1]
-  }
+module "vmseries" {
+  source = "github.com/PaloAltoNetworks/terraform-google-vmseries-modules//modules/autoscale?ref=autoscale_regional_migs-update"
+ 
   region                 = var.region
   name                   = "${local.prefix}vmseries"
-  use_regional_mig       = false
+  use_regional_mig       = true
   min_vmseries_replicas  = var.vmseries_replica_minimum // min firewalls per zone.
   max_vmseries_replicas  = var.vmseries_replica_maximum // max firewalls per zone.
   image                  = local.vmseries_image_url
@@ -212,27 +221,23 @@ module "autoscale" {
     ssh-keys                             = fileexists(var.public_key_path) ? "admin:${file(var.public_key_path)}" : ""
   }
 
-  # metadata = {
-  #   type                        = "dhcp-client"
-  #   op-command-modes            = "mgmt-interface-swap"
-  #   vm-auth-key                 = "878627735112242"
-  #   panorama-server             = "20.124.7.65"
-  #   dgname                      = "gcp-hub"
-  #   tplname                     = "gcp-hub_stack"
-  #   dhcp-send-hostname          = "yes"
-  #   dhcp-send-client-id         = "yes"
-  #   dhcp-accept-server-hostname = "yes"
-  #   dhcp-accept-server-domain   = "yes"
-  #   dns-primary                 = "169.254.169.254"
-  #   dns-secondary               = "8.8.8.8"
-  # }
-
-  # named_ports = [
-  #   {
-  #     name = "http"
-  #     port = "80"
-  #   }
-  # ]
+/*
+## metadata example if bootstrapping to Panorama.
+  metadata = {
+    type                        = "dhcp-client"
+    op-command-modes            = "mgmt-interface-swap"
+    vm-auth-key                 = "878627735112242"
+    panorama-server             = "20.124.7.65"
+    dgname                      = "gcp-hub"
+    tplname                     = "gcp-hub_stack"
+    dhcp-send-hostname          = "yes"
+    dhcp-send-client-id         = "yes"
+    dhcp-accept-server-hostname = "yes"
+    dhcp-accept-server-domain   = "yes"
+    dns-primary                 = "169.254.169.254"
+    dns-secondary               = "8.8.8.8"
+  }
+*/
 }
 
 
@@ -248,13 +253,11 @@ module "lb_internal" {
   network    = module.vpc_trust.network_id
   subnetwork = module.vpc_trust.subnets_self_links[0]
   all_ports  = true
-  # backends = {
-  #   backend1 = module.autoscale.regional_instance_group_id
-  # }
+
   backends = {
-    backend1 = module.autoscale.zone_instance_group_id["zone1"]
-    backend2 = module.autoscale.zone_instance_group_id["zone2"]
+    backend1 = module.vmseries.regional_instance_group_id
   }
+
   allow_global_access = true
 }
 
@@ -262,14 +265,14 @@ module "lb_internal" {
 module "lb_external" {
   source = "PaloAltoNetworks/vmseries-modules/google//modules/lb_external"
 
-  name = "${local.prefix}vmseries-external-lb"
-  rules = {
-    "rule1" = { port_range = 80 },
-    "rule2" = { port_range = 22 }
-  }
-
+  name                           = "${local.prefix}vmseries-external-lb"
   health_check_http_port         = 80
   health_check_http_request_path = "/"
+
+  rules = {
+    "rule1" = { all_ports = true }
+  }
+
 }
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -280,31 +283,9 @@ module "lb_external" {
 resource "google_monitoring_dashboard" "dashboard" {
   count          = (var.create_monitoring_dashboard ? 1 : 0)
   dashboard_json = templatefile("${path.root}/bootstrap_files/dashboard.json.tpl", { dashboard_name = "VM-Series Metrics" })
+  lifecycle {
+    ignore_changes = [
+      dashboard_json
+    ]
+  }
 }
-
-
-
-# output instance_group_id_regional {
-#   value = module.autoscale_regional.regional_instance_group_id
-# }
-
-
-
-
-# output instance_group_id_zonal {
-#   value = module.autoscale.zone_instance_group_id
-# }
-
-
-
-# output pubsub_topic_id {
-#   value = module.autoscale.pubsub_topic_id
-# }
-
-# output  pubsub_subscription_id {
-#   value = module.autoscale.pubsub_subscription_id
-# }
-
-# output pubsub_subscription_iam_member_etag {
-#   value = module.autoscale.pubsub_subscription_iam_member_etag
-# }
