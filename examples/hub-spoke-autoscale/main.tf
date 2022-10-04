@@ -171,10 +171,10 @@ module "bootstrap" {
   source          = "PaloAltoNetworks/vmseries-modules/google//modules/bootstrap"
   service_account = module.iam_service_account.email
   files = {
-    "bootstrap_files/init-cfg.txt"                           = "config/init-cfg.txt"
-    "bootstrap_files/bootstrap.xml"                          = "config/bootstrap.xml"
-    "bootstrap_files/content/panupv2-all-contents-8622-7593" = "content/panupv2-all-contents-8622-7593"
-    "bootstrap_files/content/panup-all-antivirus-4222-4735" = "content/panup-all-antivirus-4222-4735"
+    "bootstrap_files/init-cfg.txt"                               = "config/init-cfg.txt"
+    "bootstrap_files/bootstrap.xml"                              = "config/bootstrap.xml"
+    "bootstrap_files/content/panupv2-all-contents-8622-7593"     = "content/panupv2-all-contents-8622-7593"
+    "bootstrap_files/content/panup-all-antivirus-4222-4735"      = "content/panup-all-antivirus-4222-4735"
     "bootstrap_files/content/panupv3-all-wildfire-703414-706774" = "content/panupv3-all-wildfire-703414-706774"
   }
 
@@ -186,7 +186,7 @@ module "bootstrap" {
 
 module "vmseries" {
   source = "github.com/PaloAltoNetworks/terraform-google-vmseries-modules//modules/autoscale?ref=autoscale_regional_migs-update"
- 
+
   region                 = var.region
   name                   = "${local.prefix}vmseries"
   use_regional_mig       = true
@@ -221,7 +221,7 @@ module "vmseries" {
     ssh-keys                             = fileexists(var.public_key_path) ? "admin:${file(var.public_key_path)}" : ""
   }
 
-/*
+  /*
 ## metadata example if bootstrapping to Panorama.
   metadata = {
     type                        = "dhcp-client"
