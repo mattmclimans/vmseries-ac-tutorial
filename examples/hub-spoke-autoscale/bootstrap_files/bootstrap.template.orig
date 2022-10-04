@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<config detail-version="10.2.2" urldb="paloaltonetworks" version="10.2.0">
+<config detail-version="10.1.4" urldb="paloaltonetworks" version="10.1.0">
   <mgt-config>
     <users>
       <entry name="admin">
@@ -8,21 +8,12 @@
             <superuser>yes</superuser>
           </role-based>
         </permissions>
-        <phash>$5$lovbamjd$xk3XPgxqaCmSTPdKicGXNM4IbfBnzVCBwjsJi9qeyUB</phash>
-      </entry>
-      <entry name="paloalto">
-        <permissions>
-          <role-based>
-            <superuser>yes</superuser>
-          </role-based>
-        </permissions>
-        <phash>$5$tfsolksy$ZJNnUXgcRK7R1acvpAj7sKAA8lID6rIo5PVnPIQQDQA</phash>
+        <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FETU9Vb3pka3FESjUxK3pGU0ZxOG85YzN0NEY0N1V2ZDFBa2hmUE1IZkxUR0Z3aUE5aGVmOEw5cGN5TmdLbmlzcEoxc1ZISGFLcGpBcjc0RTE1OVVRQndhaURZL3JaUlZXYmZkYkhYSlJmQmpndTRYelp0Tk0rQUV2eUVQd0Y1c3lZQk1uT2I2US9YN0g5eXBDVVkrc0FJaU5oMHdKZmc0SHlmbXJjZjdBa0xmS2lUYmlMWlNZSUJiUkJrWmt0VXUvZVUxSUpUYjZZczNKMDdCajhKdjAzRFBCWERsM3F6bHRabFdlTGFJZ3FqaU9MUjIyZG9INXZBZTBQVndSRENFMUNWbjdKV3M4L29VN0t1dmVVVlJ3dnNKUFN5Y09hUTMyeUxEWGFJTW1SOVdjS0JUWVdiSC9WdjFwTVVoRzI2RzhNOVdsdWl5cDBmL0lZYm8ycExIbXBYdnk5UkRNQ05kcUJYby9GUjZlM09uRTdYNDJsV0NVWWhBOStkMzgrdTRiQ2YxdlpOQ1l6THVUclRFU0JiSWIzeWtCc0x6ZXJjdllhbU1WakxQRkpQWHM4bFQ3MFdveDZYU0h6VjZab2pBTm5jSEpCbUx5NDBFbGx5MjZ0ajk4Nk05enpHV3RuemVHN0RhNDlGMXFlbzY5MmZ5OTh6a09NbzgyalI5RU5wS009IG1tY2xpbWFuc0BNYXR0aGV3cy1NYWMtbWluaS5sb2NhbA==</public-key>
       </entry>
     </users>
     <password-complexity>
       <enabled>yes</enabled>
       <minimum-length>8</minimum-length>
-      <password-change-on-first-login>yes</password-change-on-first-login>
     </password-complexity>
   </mgt-config>
   <shared>
@@ -504,11 +495,6 @@
               <secondary>8.8.8.8</secondary>
             </servers>
           </dns-setting>
-          <device-telemetry>
-            <threat-prevention>no</threat-prevention>
-            <device-health-performance>no</device-health-performance>
-            <product-usage>no</product-usage>
-          </device-telemetry>
         </system>
         <setting>
           <config>
@@ -517,7 +503,7 @@
           <management>
             <hostname-type-in-syslog>FQDN</hostname-type-in-syslog>
             <initcfg>
-              <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FDL3pHUUJtcG9wTVNDNm1GWmNyNnR2bnp6NGR1ZkJreUNnTW9yMGs5YzVyU3EzblorellPR29STFZSTFBiTkJEbzU5TUJGaGhVTXJmSUlKeHFOZXFHZ3hTQlRqR1VIYWwrTWZ6M0xvZVBocjVMOUhwQjZpUzhodDZ2b3lsa0NQTlJJQU1Ed3Y4Sjk0MzhDd25La0piQ1gyU1dKWCtIV3VYSnpnMmVFOVRMR0Q4ZHI3RGhabkgzb2xldTAzYUhoVjJwV1J0L2VXelBja04vYUdEWWxkVmtWbWR1SjUxbG5sNzRxTXZpMXdmRUh5eXZUK1hyQ3lMWXJOSXRtb3RZSWhDZnBVUGp2Und5NXBvVy8zK1Jwb0QyQllxcGsyTmswZ3Jtc214Y2N4V25IMGZWcHNyNjFpQ2VZTkUxb0NsYlY1MW4wL2huVGQ1OHFyL1R6aTVjUW16UVVLQXBtTFF5Ym9XVUtlZEdxcnIzRU5kaGFWbjVpSFl3ckwwWm1jOTBrelo4NWFDNzkwK3phaTlsTjFYVG14Wk9nOUt5R0hkMGZZRjdpZnpOcVpiSExVMnliOHVUVFVQNkZ3d2k0MjdvSUlvYnN5L0paMkMyUnBNenFuUDh2d25IZ3Y2eXJjYTdiUXRwYy9TRlFTSGlRTWhJR25nOFF3K1hWeS92VjdoeENyb0U9IG1tY2xpbWFuc0Bjcy0xMDY5NDkwNTU2NjQtZGVmYXVsdA==</public-key>
+              <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FETU9Vb3pka3FESjUxK3pGU0ZxOG85YzN0NEY0N1V2ZDFBa2hmUE1IZkxUR0Z3aUE5aGVmOEw5cGN5TmdLbmlzcEoxc1ZISGFLcGpBcjc0RTE1OVVRQndhaURZL3JaUlZXYmZkYkhYSlJmQmpndTRYelp0Tk0rQUV2eUVQd0Y1c3lZQk1uT2I2US9YN0g5eXBDVVkrc0FJaU5oMHdKZmc0SHlmbXJjZjdBa0xmS2lUYmlMWlNZSUJiUkJrWmt0VXUvZVUxSUpUYjZZczNKMDdCajhKdjAzRFBCWERsM3F6bHRabFdlTGFJZ3FqaU9MUjIyZG9INXZBZTBQVndSRENFMUNWbjdKV3M4L29VN0t1dmVVVlJ3dnNKUFN5Y09hUTMyeUxEWGFJTW1SOVdjS0JUWVdiSC9WdjFwTVVoRzI2RzhNOVdsdWl5cDBmL0lZYm8ycExIbXBYdnk5UkRNQ05kcUJYby9GUjZlM09uRTdYNDJsV0NVWWhBOStkMzgrdTRiQ2YxdlpOQ1l6THVUclRFU0JiSWIzeWtCc0x6ZXJjdllhbU1WakxQRkpQWHM4bFQ3MFdveDZYU0h6VjZab2pBTm5jSEpCbUx5NDBFbGx5MjZ0ajk4Nk05enpHV3RuemVHN0RhNDlGMXFlbzY5MmZ5OTh6a09NbzgyalI5RU5wS009IG1tY2xpbWFuc0BNYXR0aGV3cy1NYWMtbWluaS5sb2NhbA==</public-key>
               <type>
                 <dhcp-client>
                   <send-hostname>yes</send-hostname>
@@ -533,7 +519,7 @@
           </management>
         </setting>
         <plugins>
-          <vm_series version="3.0.2">
+          <vm_series version="2.1.5">
             <gcp-cloudwatch>
               <enabled>yes</enabled>
               <update-interval>1</update-interval>
@@ -1234,6 +1220,14 @@
                   </mode>
                   <log-severity>medium</log-severity>
                 </credential-enforcement>
+                <mlav-engine-urlbased-enabled>
+                  <entry name="Javascript Exploit Detection">
+                    <mlav-policy-action>allow</mlav-policy-action>
+                  </entry>
+                  <entry name="Phishing Detection">
+                    <mlav-policy-action>allow</mlav-policy-action>
+                  </entry>
+                </mlav-engine-urlbased-enabled>
                 <alert>
                   <member>abortion</member>
                   <member>abused-drugs</member>
@@ -1308,8 +1302,6 @@
                   <member>web-based-email</member>
                   <member>web-hosting</member>
                 </alert>
-                <local-inline-cat>yes</local-inline-cat>
-                <cloud-inline-cat>no</cloud-inline-cat>
               </entry>
             </url-filtering>
             <file-blocking>
