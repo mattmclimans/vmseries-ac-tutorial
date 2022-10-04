@@ -4,7 +4,7 @@ region                      = "us-central1"
 prefix                      = "panw"
 
 allowed_sources             = ["0.0.0.0/0"]
-vmseries_image_name         = "vmseries-flex-bundle2-1022"
+vmseries_image_name         = "vmseries-flex-bundle2-1022h2"
 vmseries_replica_minimum    = 1
 vmseries_replica_maximum    = 1
 create_spoke_networks       = true

@@ -70,13 +70,6 @@ module "vpc_spoke2" {
       next_hop_ilb      = module.lb_internal.address
       #next_hop_internet = "true"
       #tags             = "egress-inet"
-    },
-    {
-      name              = "delete-me"
-      description       = "Default route to VM-Series NGFW"
-      destination_range = "74.97.22.59/32"
-      next_hop_internet = "true"
-      #tags             = "egress-inet"
     }
   ]
 
@@ -179,7 +172,6 @@ resource "google_compute_instance" "spoke2_vm1" {
   network_interface {
     subnetwork = module.vpc_spoke2[0].subnets_self_links[0]
     network_ip = cidrhost(var.cidr_spoke2, 10)
-    access_config {}
   }
 
   boot_disk {
