@@ -23,7 +23,7 @@ variable "vmseries_image_name" {
 
 variable "vmseries_replica_minimum" {
   description = "The max number of firewalls to run in each region."
-  default     = 2
+  default     = 1
   type        = number
 }
 
