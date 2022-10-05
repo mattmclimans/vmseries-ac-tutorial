@@ -4,14 +4,11 @@ locals {
   vmseries_image_url = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/${var.vmseries_image_name}"
 }
 
-data "google_compute_zones" "main" {}
-
-
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Create MGMT, UNTRUST, and TRUST VPC networks.  
-# --------------------------------------------------------------------------------------------------------------------------------------------
+
 # The VM-Series network interfaces are attached to UNTRUST (NIC0), MGMT (NIC1), and TRUST (NIC2) 
-# VPC networks.  The interfaces should always be in this order when interface-swap is applied.
+# The interfaces should always be in this order when interface-swap is applied.
 
 module "vpc_mgmt" {
   source       = "terraform-google-modules/network/google"
@@ -108,7 +105,7 @@ module "vpc_trust" {
   ]
 }
 
-#  Create a Cloud NAT in untrust VPC network to provide outbound internet connectivity. 
+# Create a Cloud NAT in untrust VPC network to provide outbound internet connectivity. 
 module "cloud_nat_untrust" {
   source        = "terraform-google-modules/cloud-nat/google"
   version       = "=1.2"
@@ -122,14 +119,47 @@ module "cloud_nat_untrust" {
 
 
 
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# Create VM-Series Regional Managed Instance Group for autoscaling
-# --------------------------------------------------------------------------------------------------------------------------------------------
 
-# Create an IAM service account to assign to the regional instance template.
-module "iam_service_account" {
-  source             = "PaloAltoNetworks/vmseries-modules/google//modules/iam_service_account"
-  service_account_id = "${local.prefix}vmseries-mig-sa"
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# Create bootstrap bucket for VM-Series
+
+# Generate random password
+resource "random_string" "password" {
+  count            = (var.create_vmseries_password ? 1 : 0)
+  length           = 8
+  min_lower        = 1
+  min_upper        = 1
+  min_numeric      = 1
+  min_special      = 1
+  override_special = "!@#$%&*=+"
+}
+
+# Generate a petname for the user account.
+resource "random_pet" "username" {
+  count     = (var.create_vmseries_password ? 1 : 0)
+  length    = 5
+  separator = ""
+}
+
+# Create the password's phash.
+module "create_phash" {
+  source                 = "terraform-google-modules/gcloud/google"
+  version                = "~> 3.0.1"
+  count                  = (var.create_vmseries_password ? 1 : 0)
+  platform               = "linux"
+  create_cmd_entrypoint  = "echo"
+  create_cmd_body        = "${random_string.password[0].result} | mkpasswd -m MD5 -S acfwlwlo -s | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/phash.txt")}"
+  destroy_cmd_entrypoint = "rm"
+  destroy_cmd_body       = abspath("${path.module}/bootstrap_files/phash.txt")
+}
+
+# Retrieve phash so we can apply it to bootstrap.template. 
+data "local_file" "read_phash" {
+  count    = (var.create_vmseries_password ? 1 : 0)
+  filename = "${path.module}/bootstrap_files/phash.txt"
+  depends_on = [
+    module.create_phash
+  ]
 }
 
 # Download bootstrap files to bootstrap_files directory.
@@ -137,9 +167,11 @@ module "download_content" {
   source  = "terraform-google-modules/gcloud/google"
   version = "~> 3.0.1"
 
-  platform              = "linux"
-  create_cmd_entrypoint = "gsutil"
-  create_cmd_body       = "cp -r gs://vmseries-arch-center-tutorial-09282022/content ${path.module}/bootstrap_files"
+  platform               = "linux"
+  create_cmd_entrypoint  = "gsutil"
+  create_cmd_body        = "cp -r gs://vmseries-arch-center-tutorial-09282022/content ${path.module}/bootstrap_files"
+  destroy_cmd_entrypoint = "rm"
+  destroy_cmd_body       = "-rf ${path.module}/bootstrap_files/content"
 }
 
 # Retrieve the hub subnet ID.
@@ -152,11 +184,13 @@ data "google_compute_subnetwork" "trust" {
 data "template_file" "bootstrap" {
   template = file("bootstrap_files/bootstrap.template")
   vars = {
-    trust_gateway = data.google_compute_subnetwork.trust.gateway_address
-    spoke1_cidr   = var.cidr_spoke1
-    spoke2_cidr   = var.cidr_spoke2
-    spoke1_vm1_ip = cidrhost(var.cidr_spoke1, 10)
-    spoke2_vm1_ip = cidrhost(var.cidr_spoke2, 10)
+    trust_gateway  = data.google_compute_subnetwork.trust.gateway_address
+    spoke1_cidr    = var.cidr_spoke1
+    spoke2_cidr    = var.cidr_spoke2
+    spoke1_vm1_ip  = cidrhost(var.cidr_spoke1, 10)
+    spoke2_vm1_ip  = cidrhost(var.cidr_spoke2, 10)
+    username       = var.create_vmseries_password ? random_pet.username[0].id : "tempuser"
+    username_phash = var.create_vmseries_password ? data.local_file.read_phash[0].content : "$1$acfwlwlo$DbyCDMgVl22kNnaONS.5o1"  // Unknown password for security purposes.  Delete tempuser after deployment.
   }
 }
 
@@ -172,16 +206,27 @@ module "bootstrap" {
   service_account = module.iam_service_account.email
   files = {
     "bootstrap_files/init-cfg.txt"                               = "config/init-cfg.txt"
-    "bootstrap_files/bootstrap.xml"                              = "config/bootstrap.xml"
+    "${local_file.bootstrap.filename}"                           = "config/bootstrap.xml"
     "bootstrap_files/content/panupv2-all-contents-8622-7593"     = "content/panupv2-all-contents-8622-7593"
     "bootstrap_files/content/panup-all-antivirus-4222-4735"      = "content/panup-all-antivirus-4222-4735"
     "bootstrap_files/content/panupv3-all-wildfire-703414-706774" = "content/panupv3-all-wildfire-703414-706774"
   }
 
   depends_on = [
-    local_file.bootstrap,
     module.download_content
   ]
+}
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# Create VM-Series Regional Managed Instance Group for autoscaling
+
+# Create an IAM service account to assign to the regional instance template.
+module "iam_service_account" {
+  source             = "PaloAltoNetworks/vmseries-modules/google//modules/iam_service_account"
+  service_account_id = "${local.prefix}vmseries-mig-sa"
 }
 
 module "vmseries" {
@@ -220,30 +265,14 @@ module "vmseries" {
     serial-port-enable                   = true
     ssh-keys                             = fileexists(var.public_key_path) ? "admin:${file(var.public_key_path)}" : ""
   }
-
-  /*
-## metadata example if bootstrapping to Panorama.
-  metadata = {
-    type                        = "dhcp-client"
-    op-command-modes            = "mgmt-interface-swap"
-    vm-auth-key                 = "878627735112242"
-    panorama-server             = "20.124.7.65"
-    dgname                      = "gcp-hub"
-    tplname                     = "gcp-hub_stack"
-    dhcp-send-hostname          = "yes"
-    dhcp-send-client-id         = "yes"
-    dhcp-accept-server-hostname = "yes"
-    dhcp-accept-server-domain   = "yes"
-    dns-primary                 = "169.254.169.254"
-    dns-secondary               = "8.8.8.8"
-  }
-*/
 }
+
+
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Create Internal & External Network Load Balancers
-# --------------------------------------------------------------------------------------------------------------------------------------------
+
 
 # The internal LB distributes all egress traffic from the spoke networks to the VM-Series trust interfaces for inspection.
 module "lb_internal" {
@@ -275,9 +304,11 @@ module "lb_external" {
 
 }
 
+
+
+
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Custom Monitoring Dashboard for VM-Series utilization metrics.
-# --------------------------------------------------------------------------------------------------------------------------------------------
 
 # If 'create_monitoring_dashboard' is set to true, a custom dashboard will be created to display the VM-Series utilization metrics.
 resource "google_monitoring_dashboard" "dashboard" {

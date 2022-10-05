@@ -124,3 +124,26 @@ variable "spoke_vm_scopes" {
   ]
 }
 
+variable "create_vmseries_password" {
+  description = "Create a random password for the VM-Series firewall.  This password is not secure.  Never use this option for production environments.  mkpasswd must be installed on host executing the Terraform plan"
+  default     = false
+}
+
+
+  /*
+## metadata example if bootstrapping to Panorama.
+  metadata = {
+    type                        = "dhcp-client"
+    op-command-modes            = "mgmt-interface-swap"
+    vm-auth-key                 = "878627735112242"
+    panorama-server             = "20.124.7.65"
+    dgname                      = "gcp-hub"
+    tplname                     = "gcp-hub_stack"
+    dhcp-send-hostname          = "yes"
+    dhcp-send-client-id         = "yes"
+    dhcp-accept-server-hostname = "yes"
+    dhcp-accept-server-domain   = "yes"
+    dns-primary                 = "169.254.169.254"
+    dns-secondary               = "8.8.8.8"
+  }
+*/

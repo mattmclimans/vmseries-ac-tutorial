@@ -1,6 +1,5 @@
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Create Spoke VPC networks
-# --------------------------------------------------------------------------------------------------------------------------------------------
 
 module "vpc_spoke1" {
   source                                 = "terraform-google-modules/network/google"
@@ -90,9 +89,10 @@ module "vpc_spoke2" {
 }
 
 
+
+
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Create VPC peering connections between spoke networks and the trust network
-# --------------------------------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_network_peering" "spoke1_to_trust" {
   count        = (var.create_spoke_networks ? 1 : 0)
@@ -123,9 +123,11 @@ resource "google_compute_network_peering" "trust_to_spoke2" {
   peer_network = module.vpc_spoke2[0].network_id
 }
 
+
+
+
 # --------------------------------------------------------------------------------------------------------------------------------------------
 # Create Spoke VM Ubuntu instances for testing inspection flows
-# --------------------------------------------------------------------------------------------------------------------------------------------
 
 resource "google_compute_instance" "spoke1_vm" {
   count                     = (var.create_spoke_networks ? 1 : 0)
@@ -184,5 +186,4 @@ resource "google_compute_instance" "spoke2_vm1" {
   service_account {
     scopes = var.spoke_vm_scopes
   }
-
 }
