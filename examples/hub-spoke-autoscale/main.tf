@@ -190,7 +190,7 @@ data "template_file" "bootstrap" {
     spoke1_vm1_ip  = cidrhost(var.cidr_spoke1, 10)
     spoke2_vm1_ip  = cidrhost(var.cidr_spoke2, 10)
     username       = var.create_vmseries_password ? random_pet.username[0].id : "tempuser"
-    username_phash = var.create_vmseries_password ? data.local_file.read_phash[0].content : "$1$acfwlwlo$DbyCDMgVl22kNnaONS.5o1"  // Unknown password for security purposes.  Delete tempuser after deployment.
+    username_phash = var.create_vmseries_password ? data.local_file.read_phash[0].content : "$1$acfwlwlo$DbyCDMgVl22kNnaONS.5o1" // Unknown password for security purposes.  Delete tempuser after deployment.
   }
 }
 

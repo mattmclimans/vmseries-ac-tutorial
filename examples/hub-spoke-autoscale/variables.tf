@@ -1,12 +1,5 @@
 variable "project_id" {
   description = "GCP Project ID"
-  default     = null
-  type        = string
-}
-
-variable "region" {
-  description = "GCP Region"
-  default     = "us-east1"
   type        = string
 }
 
@@ -15,11 +8,33 @@ variable "public_key_path" {
   default     = "~/.ssh/gcp-demo.pub"
 }
 
+variable "allowed_sources" {
+  description = "A list of IP addresses to be added to the management network's ingress firewall rule. The IP addresses will be able to access to the VM-Series management interface."
+  type        = list(string)
+}
+
+variable "region" {
+  description = "GCP Region"
+  type        = string
+}
+
 variable "vmseries_image_name" {
   description = "Name of the VM-Series image within the paloaltonetworksgcp-public project.  To list available images, run: `gcloud compute images list --project paloaltonetworksgcp-public --no-standard-images`. If you are using a custom image in a different project, please update `local.vmseries_iamge_url` in `main.tf`."
   default     = "vmseries-flex-byol-1014"
   type        = string
 }
+
+variable "create_spoke_networks" {
+  description = <<-EOF
+  Set to 'true' to create two spoke networks.  The spoke networks will be connected to the hub network via VPC
+  Peering and each network will have a single Ubuntu instance for testing inspection flows. 
+  Set to 'false' to skip spoke network creation. 
+  EOF
+  type        = bool
+}
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------
 
 variable "vmseries_replica_minimum" {
   description = "The max number of firewalls to run in each region."
@@ -54,13 +69,6 @@ variable "autoscaler_metrics" {
   }
 }
 
-
-variable "allowed_sources" {
-  description = "A list of IP addresses to be added to the management network's ingress firewall rule. The IP addresses will be able to access to the VM-Series management interface."
-  type        = list(string)
-  default     = null
-}
-
 variable "cidr_mgmt" {
   description = "The CIDR range of the management subnetwork."
   type        = string
@@ -85,20 +93,12 @@ variable "create_monitoring_dashboard" {
   default     = true
 }
 
-variable "create_spoke_networks" {
-  description = <<-EOF
-  Set to 'true' to create two spoke networks.  The spoke networks will be connected to the hub network via VPC
-  Peering and each network will have a single Ubuntu instance for testing inspection flows. 
-  Set to 'false' to skip spoke network creation. 
-  EOF
-  type        = bool
-  default     = false
-}
+
 
 variable "cidr_spoke1" {
   description = "The CIDR range of the management subnetwork."
   type        = string
-  default     = null
+  default     = "null"
 }
 
 variable "cidr_spoke2" {
@@ -130,7 +130,7 @@ variable "create_vmseries_password" {
 }
 
 
-  /*
+/*
 ## metadata example if bootstrapping to Panorama.
   metadata = {
     type                        = "dhcp-client"

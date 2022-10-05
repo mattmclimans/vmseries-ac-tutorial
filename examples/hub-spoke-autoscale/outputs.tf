@@ -1,14 +1,37 @@
-output "EXTERNAL_LB_IP" {
-  description = "External load balancer's forwarding rule address."
-  value       = module.lb_external.ip_addresses["rule1"]
+# output "TEST_THREAT" {
+#   description = "A simple curl command to demonstrate threat prevention."
+#   value       = "curl http://${module.lb_external.ip_addresses["rule1"]}:80/cgi-bin/../../../..//bin/cat%20/etc/passwd"
+# }
+
+
+output "APP_URL" {
+  description = "External load balancer's frontend URL that resolves to spoke1 web servers after VM-Series inspection."
+  value       = "http://${module.lb_external.ip_addresses["rule1"]}"
+}
+output "JENKINS_URL" {
+  description = "External load balancer's frontend URL that resolves to spoke1 Jenkins server after VM-Series inspection."
+  value       = "http://${module.lb_external.ip_addresses["rule1"]}:8080"
 }
 
-output "VMSERIES_UN" {
-  value = var.create_vmseries_password ? random_pet.username[0].id : null
+output "SSH_TO_JUMP_VM" {
+  description = "External load balancer's frontend address that opens SSH session to spoke2-vm1 after VM-Series inspection."
+  value       = "ssh ${var.spoke_vm_user}@${module.lb_external.ip_addresses["rule1"]} -i ${trim(var.public_key_path, ".pub")}"
+}
+
+
+output "VMSERIES" {
+  description = "VM-Series management interface address."
+  value       = "https://${data.local_file.read_public_ip.content}"
 }
 
 output "VMSERIES_PW" {
-  value = var.create_vmseries_password ? random_string.password[0].result : null
+  description = "VM-Series password."
+  value       = var.create_vmseries_password ? random_string.password[0].result : null
+}
+
+output "VMSERIES_UN" {
+  description = "VM-Series username."
+  value       = var.create_vmseries_password ? random_pet.username[0].id : null
 }
 
 
@@ -19,7 +42,7 @@ output "VMSERIES_PW" {
  to the user's terminal window.  This makes it easy for the user to find the VM-Series mgmt IP.
  Retrieving the public IP from a managed instance group created with Terraform is complicated 
  because the compute instance is initiated outside of Terraform.  This workaround is easier.
-*/ 
+*/
 module "retrieve_public_ip" {
   source                 = "terraform-google-modules/gcloud/google"
   version                = "~> 3.0.1"
@@ -30,7 +53,7 @@ module "retrieve_public_ip" {
   destroy_cmd_body       = abspath("${path.module}/bootstrap_files/public_ip.txt")
 
   module_depends_on = [
-    module.lb_internal  // Wait for internal LB because it is the last resource that is created.
+    module.lb_internal // Wait for internal LB because it is the last resource that is created.
   ]
 }
 
@@ -57,7 +80,3 @@ data "local_file" "read_public_ip" {
   ]
 }
 
-# Output public IP.
-output "VMSERIES_URL" {
-  value = "https://${data.local_file.read_public_ip.content}"
-}
