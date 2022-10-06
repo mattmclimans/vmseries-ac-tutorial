@@ -8,7 +8,7 @@ variable "public_key_path" {
   default     = "~/.ssh/gcp-demo.pub"
 }
 
-variable "allowed_sources" {
+variable "mgmt_acl_source_ips" {
   description = "A list of IP addresses to be added to the management network's ingress firewall rule. The IP addresses will be able to access to the VM-Series management interface."
   type        = list(string)
 }

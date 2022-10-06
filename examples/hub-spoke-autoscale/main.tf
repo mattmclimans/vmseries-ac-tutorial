@@ -31,7 +31,7 @@ module "vpc_mgmt" {
       direction   = "INGRESS"
       priority    = "100"
       description = "Allow ingress access to VM-Series management interface"
-      ranges      = var.allowed_sources
+      ranges      = var.mgmt_acl_source_ips
       allow = [
         {
           protocol = "tcp"
