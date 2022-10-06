@@ -137,7 +137,7 @@ resource "random_string" "password" {
 # Generate a petname for the user account.
 resource "random_pet" "username" {
   count     = (var.create_vmseries_password ? 1 : 0)
-  length    = 5
+  length    = 2
   separator = ""
 }
 
