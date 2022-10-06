@@ -50,26 +50,44 @@ output "VMSERIES_UN" {
  Retrieving the public IP from a managed instance group created with Terraform is complicated 
  because the compute instance is initiated outside of Terraform.  This workaround is easier.
 */
-module "retrieve_public_ip" {
-  source                 = "terraform-google-modules/gcloud/google"
-  version                = "~> 3.0.1"
-  platform               = "linux"
-  create_cmd_entrypoint  = ""
-  create_cmd_body        = "sleep 30 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
-  destroy_cmd_entrypoint = "rm"
-  destroy_cmd_body       = abspath("${path.module}/bootstrap_files/public_ip.txt")
+# module "retrieve_public_ip" {
+#   source                 = "terraform-google-modules/gcloud/google"
+#   version                = "~> 3.0.1"
+#   platform               = "linux"
+#   create_cmd_entrypoint  = ""
+#   create_cmd_body        = "sleep 30 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
+#   destroy_cmd_entrypoint = "rm"
+#   destroy_cmd_body       = abspath("${path.module}/bootstrap_files/public_ip.txt")
 
-  module_depends_on = [
-    module.lb_internal // Wait for internal LB because it is the last resource that is created.
+#   module_depends_on = [
+#     module.lb_internal // Wait for internal LB because it is the last resource that is created.
+#   ]
+# }
+
+resource "null_resource" "retrieve_public_ip" {
+  provisioner "local-exec" {
+    command = "sleep 45 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
+  }
+  provisioner "local-exec" {
+    command = "rm ${path.module}/bootstrap_files/public_ip.txt"
+    when = destroy
+  }
+
+  depends_on = [
+    module.lb_internal,
+    module.lb_external, 
+    module.vmseries
   ]
 }
+
+
 
 # Retrieve public IPs so we output it to the terminal window.
 data "local_file" "read_public_ip" {
   filename = "${path.module}/bootstrap_files/public_ip.txt"
   depends_on = [
-    module.retrieve_public_ip
-    #null_resource.retrieve_public_ip
+    #module.retrieve_public_ip
+    null_resource.retrieve_public_ip
   ]
 }
 
