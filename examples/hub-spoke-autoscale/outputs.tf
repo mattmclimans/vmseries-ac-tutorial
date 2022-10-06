@@ -18,6 +18,10 @@ output "SSH_TO_JUMP_VM" {
   value       = "ssh ${var.spoke_vm_user}@${module.lb_external.ip_addresses["rule1"]} -i ${trim(var.public_key_path, ".pub")}"
 }
 
+output "TEST_THREAT" {
+  description = "A harmless threat to launch from the Jump VM in spoke2 to the web application in spoke1."
+  value = "curl http://${cidrhost(var.cidr_spoke1, 10)}:80/cgi-bin/../../../..//bin/cat%20/etc/passwd"
+}
 
 output "VMSERIES" {
   description = "VM-Series management interface address."
@@ -48,7 +52,7 @@ module "retrieve_public_ip" {
   version                = "~> 3.0.1"
   platform               = "linux"
   create_cmd_entrypoint  = ""
-  create_cmd_body        = "sleep 15 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
+  create_cmd_body        = "sleep 30 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
   destroy_cmd_entrypoint = "rm"
   destroy_cmd_body       = abspath("${path.module}/bootstrap_files/public_ip.txt")
 
@@ -56,20 +60,6 @@ module "retrieve_public_ip" {
     module.lb_internal // Wait for internal LB because it is the last resource that is created.
   ]
 }
-
-# resource "null_resource" "retrieve_public_ip" {
-#   provisioner "local-exec" {
-#     command = "sleep 15 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
-#   }
-
-#   provisioner "local-exec" {
-#     when = destroy
-#     command = "rm ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
-#   }
-#   depends_on = [
-#     module.lb_internal
-#   ]
-# }
 
 # Retrieve public IPs so we output it to the terminal window.
 data "local_file" "read_public_ip" {
