@@ -4,36 +4,37 @@
 # }
 
 
-output "APP_URL" {
+output "EXTERNAL_LB_URL" {
   description = "External load balancer's frontend URL that resolves to spoke1 web servers after VM-Series inspection."
   value       = "http://${module.lb_external.ip_addresses["rule1"]}"
 }
-output "JENKINS_URL" {
-  description = "External load balancer's frontend URL that resolves to spoke1 Jenkins server after VM-Series inspection."
-  value       = "http://${module.lb_external.ip_addresses["rule1"]}:8080"
-}
 
-output "SSH_TO_JUMP_VM" {
-  description = "External load balancer's frontend address that opens SSH session to spoke2-vm1 after VM-Series inspection."
-  value       = "ssh ${var.spoke_vm_user}@${module.lb_external.ip_addresses["rule1"]} -i ${trim(var.public_key_path, ".pub")}"
-}
+# output "JENKINS_URL" {
+#   description = "External load balancer's frontend URL that resolves to spoke1 Jenkins server after VM-Series inspection."
+#   value       = "http://${module.lb_external.ip_addresses["rule1"]}:8080"
+# }
 
-output "TEST_THREAT" {
-  description = "A harmless threat to launch from the Jump VM in spoke2 to the web application in spoke1."
-  value = "curl http://${cidrhost(var.cidr_spoke1, 10)}:80/cgi-bin/../../../..//bin/cat%20/etc/passwd"
-}
+# output "SSH_TO_JUMP_VM" {
+#   description = "External load balancer's frontend address that opens SSH session to spoke2-vm1 after VM-Series inspection."
+#   value       = "ssh ${var.spoke_vm_user}@${module.lb_external.ip_addresses["rule1"]} -i ${trim(var.public_key_path, ".pub")}"
+# }
 
-output "VMSERIES" {
+# output "TEST_THREAT" {
+#   description = "A harmless threat to launch from the Jump VM in spoke2 to the web application in spoke1."
+#   value = "curl http://${cidrhost(var.cidr_spoke1, 10)}:80/cgi-bin/../../../..//bin/cat%20/etc/passwd"
+# }
+
+output "VMSERIES_MGMT" {
   description = "VM-Series management interface address."
   value       = "https://${data.local_file.read_public_ip.content}"
 }
 
-output "VMSERIES_PW" {
+output "VMSERIES_PASSWORD" {
   description = "VM-Series password."
   value       = var.create_vmseries_password ? random_string.password[0].result : null
 }
 
-output "VMSERIES_UN" {
+output "VMSERIES_USERNAME" {
   description = "VM-Series username."
   value       = var.create_vmseries_password ? random_pet.username[0].id : null
 }
