@@ -24,17 +24,19 @@ output "EXTERNAL_LB_URL" {
 #   value = "curl http://${cidrhost(var.cidr_spoke1, 10)}:80/cgi-bin/../../../..//bin/cat%20/etc/passwd"
 # }
 
-output "VMSERIES_MGMT" {
+
+
+output "VMSERIES_MGT" {
   description = "VM-Series management interface address."
   value       = "https://${data.local_file.read_public_ip.content}"
 }
 
-output "VMSERIES_PASSWORD" {
+output "VMSERIES_PW" {
   description = "VM-Series password."
   value       = var.create_vmseries_password ? random_string.password[0].result : null
 }
 
-output "VMSERIES_USERNAME" {
+output "VMSERIES_UN" {
   description = "VM-Series username."
   value       = var.create_vmseries_password ? random_pet.username[0].id : null
 }
