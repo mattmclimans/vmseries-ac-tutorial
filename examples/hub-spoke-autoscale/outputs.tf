@@ -70,12 +70,12 @@ resource "null_resource" "retrieve_public_ip" {
   }
   provisioner "local-exec" {
     command = "rm ${path.module}/bootstrap_files/public_ip.txt"
-    when = destroy
+    when    = destroy
   }
 
   depends_on = [
     module.lb_internal,
-    module.lb_external, 
+    module.lb_external,
     module.vmseries
   ]
 }

@@ -162,18 +162,6 @@ data "local_file" "read_phash" {
   ]
 }
 
-# Download bootstrap files to bootstrap_files directory.
-# module "download_content" {
-#   source  = "terraform-google-modules/gcloud/google"
-#   version = "~> 3.0.1"
-
-#   platform               = "linux"
-#   create_cmd_entrypoint  = "gsutil"
-#   create_cmd_body        = "cp -r gs://vmseries-arch-center-tutorial-09282022/content ${path.module}/bootstrap_files"
-#   destroy_cmd_entrypoint = "rm"
-#   destroy_cmd_body       = "-rf ${path.module}/bootstrap_files/content"
-# }
-
 # Retrieve the hub subnet ID.
 data "google_compute_subnetwork" "trust" {
   self_link = module.vpc_trust.subnets_self_links[0]
@@ -211,10 +199,6 @@ module "bootstrap" {
     "bootstrap_files/content/panup-all-antivirus-4222-4735"      = "content/panup-all-antivirus-4222-4735"
     "bootstrap_files/content/panupv3-all-wildfire-703414-706774" = "content/panupv3-all-wildfire-703414-706774"
   }
-
-  # depends_on = [
-  #   module.download_content
-  # ]
 }
 
 
