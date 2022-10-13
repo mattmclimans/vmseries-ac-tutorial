@@ -31,15 +31,15 @@ output "VMSERIES_MGT" {
   value       = "https://${data.local_file.read_public_ip.content}"
 }
 
-output "VMSERIES_PW" {
-  description = "VM-Series password."
-  value       = var.create_vmseries_password ? random_string.password[0].result : null
-}
+# output "VMSERIES_PW" {
+#   description = "VM-Series password."
+#   value       = var.create_vmseries_password ? random_string.password[0].result : null
+# }
 
-output "VMSERIES_UN" {
-  description = "VM-Series username."
-  value       = var.create_vmseries_password ? random_pet.username[0].id : null
-}
+# output "VMSERIES_UN" {
+#   description = "VM-Series username."
+#   value       = var.create_vmseries_password ? random_pet.username[0].id : null
+# }
 
 
 
@@ -66,7 +66,7 @@ output "VMSERIES_UN" {
 
 resource "null_resource" "retrieving_public_ip_please_wait" {
   provisioner "local-exec" {
-    command = "sleep 90 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
+    command = "sleep 45 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")} --project=${var.project_id}"
   }
   provisioner "local-exec" {
     command = "rm ${path.module}/bootstrap_files/public_ip.txt"
@@ -87,7 +87,7 @@ data "local_file" "read_public_ip" {
   filename = "${path.module}/bootstrap_files/public_ip.txt"
   depends_on = [
     #module.retrieve_public_ip
-    null_resource.retrieve_public_ip
+    null_resource.retrieving_public_ip_please_wait
   ]
 }
 
