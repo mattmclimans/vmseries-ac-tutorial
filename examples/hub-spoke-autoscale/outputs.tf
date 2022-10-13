@@ -66,7 +66,7 @@ output "VMSERIES_UN" {
 
 resource "null_resource" "retrieve_public_ip" {
   provisioner "local-exec" {
-    command = "sleep 45 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
+    command = "sleep 90 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
   }
   provisioner "local-exec" {
     command = "rm ${path.module}/bootstrap_files/public_ip.txt"
