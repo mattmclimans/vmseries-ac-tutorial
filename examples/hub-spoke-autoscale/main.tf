@@ -250,7 +250,13 @@ module "vmseries" {
     ssh-keys                             = "admin:${file(var.public_key_path)}" # fileexists(var.public_key_path) ? "admin:${file(var.public_key_path)}" : ""
     #ssh-keys                            = fileexists(var.public_key_path) ? "admin:${file(var.public_key_path)}" : ""
   }
+
+depends_on = [ 
+  module.bootstrap
+]
+
 }
+
 
 
 

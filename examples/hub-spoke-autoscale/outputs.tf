@@ -66,7 +66,7 @@ output "VMSERIES_MGT" {
 
 resource "null_resource" "retrieving_public_ip_please_wait" {
   provisioner "local-exec" {
-    command = "sleep 45 && gcloud compute instances list --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")} --project=${var.project_id}"
+    command = "sleep 45 && gcloud compute instances list --project=${var.project_id} --format='value(EXTERNAL_IP)' | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/public_ip.txt")}"
   }
   provisioner "local-exec" {
     command = "rm ${path.module}/bootstrap_files/public_ip.txt"
