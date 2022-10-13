@@ -263,7 +263,7 @@ module "vmseries" {
     mgmt-interface-swap                  = "enable"
     vmseries-bootstrap-gce-storagebucket = module.bootstrap.bucket_name
     serial-port-enable                   = true
-    ssh-keys                             = "admin:${fileexists(var.public_key_path)}" # fileexists(var.public_key_path) ? "admin:${file(var.public_key_path)}" : ""
+    ssh-keys                             = "admin:${file(var.public_key_path)}" # fileexists(var.public_key_path) ? "admin:${file(var.public_key_path)}" : ""
     #ssh-keys                            = fileexists(var.public_key_path) ? "admin:${file(var.public_key_path)}" : ""
   }
 }
