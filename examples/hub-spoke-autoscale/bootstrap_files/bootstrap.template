@@ -9,14 +9,6 @@
           </role-based>
         </permissions>
       </entry>
-      <entry name="${username}">
-        <permissions>
-          <role-based>
-            <superuser>yes</superuser>
-          </role-based>
-        </permissions>
-        <phash>${username_phash}</phash>
-      </entry>
     </users>
     <password-complexity>
       <enabled>yes</enabled>

@@ -124,43 +124,43 @@ module "cloud_nat_untrust" {
 # Create bootstrap bucket for VM-Series
 
 # Generate random password
-resource "random_string" "password" {
-  count            = (var.create_vmseries_password ? 1 : 0)
-  length           = 8
-  min_lower        = 1
-  min_upper        = 1
-  min_numeric      = 1
-  min_special      = 1
-  override_special = "!@#$%&*=+"
-}
+# resource "random_string" "password" {
+#   count            = (var.create_vmseries_password ? 1 : 0)
+#   length           = 8
+#   min_lower        = 1
+#   min_upper        = 1
+#   min_numeric      = 1
+#   min_special      = 1
+#   override_special = "!@#$%&*=+"
+# }
 
-# Generate a petname for the user account.
-resource "random_pet" "username" {
-  count     = (var.create_vmseries_password ? 1 : 0)
-  length    = 2
-  separator = ""
-}
+# # Generate a petname for the user account.
+# resource "random_pet" "username" {
+#   count     = (var.create_vmseries_password ? 1 : 0)
+#   length    = 2
+#   separator = ""
+# }
 
 # Create the password's phash.
-module "create_phash" {
-  source                 = "terraform-google-modules/gcloud/google"
-  version                = "~> 3.0.1"
-  count                  = (var.create_vmseries_password ? 1 : 0)
-  platform               = "linux"
-  create_cmd_entrypoint  = "echo"
-  create_cmd_body        = "${random_string.password[0].result} | mkpasswd -m MD5 -S acfwlwlo -s | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/phash.txt")}"
-  destroy_cmd_entrypoint = "rm"
-  destroy_cmd_body       = abspath("${path.module}/bootstrap_files/phash.txt")
-}
+# module "create_phash" {
+#   source                 = "terraform-google-modules/gcloud/google"
+#   version                = "~> 3.0.1"
+#   count                  = (var.create_vmseries_password ? 1 : 0)
+#   platform               = "linux"
+#   create_cmd_entrypoint  = "echo"
+#   create_cmd_body        = "${random_string.password[0].result} | mkpasswd -m MD5 -S acfwlwlo -s | tr -d '\n' > ${abspath("${path.module}/bootstrap_files/phash.txt")}"
+#   destroy_cmd_entrypoint = "rm"
+#   destroy_cmd_body       = abspath("${path.module}/bootstrap_files/phash.txt")
+# }
 
 # Retrieve phash so we can apply it to bootstrap.template. 
-data "local_file" "read_phash" {
-  count    = (var.create_vmseries_password ? 1 : 0)
-  filename = "${path.module}/bootstrap_files/phash.txt"
-  depends_on = [
-    module.create_phash
-  ]
-}
+# data "local_file" "read_phash" {
+#   count    = (var.create_vmseries_password ? 1 : 0)
+#   filename = "${path.module}/bootstrap_files/phash.txt"
+#   depends_on = [
+#     module.create_phash
+#   ]
+# }
 
 # Retrieve the hub subnet ID.
 data "google_compute_subnetwork" "trust" {
@@ -177,8 +177,8 @@ data "template_file" "bootstrap" {
     spoke2_cidr    = var.cidr_spoke2
     spoke1_vm1_ip  = cidrhost(var.cidr_spoke1, 10)
     spoke2_vm1_ip  = cidrhost(var.cidr_spoke2, 10)
-    username       = var.create_vmseries_password ? random_pet.username[0].id : "tempuser"
-    username_phash = var.create_vmseries_password ? data.local_file.read_phash[0].content : "$1$acfwlwlo$DbyCDMgVl22kNnaONS.5o1" // Unknown password for security purposes.  Delete tempuser after deployment.
+   # username       = var.create_vmseries_password ? random_pet.username[0].id : "tempuser"
+   # username_phash = var.create_vmseries_password ? data.local_file.read_phash[0].content : "$1$acfwlwlo$DbyCDMgVl22kNnaONS.5o1" // Unknown password for security purposes.  Delete tempuser after deployment.
   }
 }
 

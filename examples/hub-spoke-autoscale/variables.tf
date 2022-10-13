@@ -18,23 +18,14 @@ variable "region" {
   type        = string
 }
 
+# --------------------------------------------------------------------------------------------------------------------------------------------
+
+
 variable "vmseries_image_name" {
   description = "Name of the VM-Series image within the paloaltonetworksgcp-public project.  To list available images, run: `gcloud compute images list --project paloaltonetworksgcp-public --no-standard-images`. If you are using a custom image in a different project, please update `local.vmseries_iamge_url` in `main.tf`."
-  default     = "vmseries-flex-byol-1014"
+  default     = "vmseries-flex-bundle2-1022h2"
   type        = string
 }
-
-variable "create_spoke_networks" {
-  description = <<-EOF
-  Set to 'true' to create two spoke networks.  The spoke networks will be connected to the hub network via VPC
-  Peering and each network will have a single Ubuntu instance for testing inspection flows. 
-  Set to 'false' to skip spoke network creation. 
-  EOF
-  type        = bool
-}
-
-
-# --------------------------------------------------------------------------------------------------------------------------------------------
 
 variable "vmseries_replica_minimum" {
   description = "The max number of firewalls to run in each region."
@@ -72,19 +63,19 @@ variable "autoscaler_metrics" {
 variable "cidr_mgmt" {
   description = "The CIDR range of the management subnetwork."
   type        = string
-  default     = null
+  default     = "10.0.0.0/28"
 }
 
 variable "cidr_untrust" {
   description = "The CIDR range of the untrust subnetwork."
   type        = string
-  default     = null
+  default     = "10.0.1.0/28"
 }
 
 variable "cidr_trust" {
   description = "The CIDR range of the trust subnetwork."
   type        = string
-  default     = null
+  default     = "10.0.2.0/28"
 }
 
 variable "create_monitoring_dashboard" {
@@ -93,18 +84,26 @@ variable "create_monitoring_dashboard" {
   default     = true
 }
 
-
+variable "create_spoke_networks" {
+  description = <<-EOF
+  Set to 'true' to create two spoke networks.  The spoke networks will be connected to the hub network via VPC
+  Peering and each network will have a single Ubuntu instance for testing inspection flows. 
+  Set to 'false' to skip spoke network creation. 
+  EOF
+  type        = bool
+  default     = true
+}
 
 variable "cidr_spoke1" {
   description = "The CIDR range of the management subnetwork."
   type        = string
-  default     = "null"
+  default     = "10.1.0.0/28"
 }
 
 variable "cidr_spoke2" {
   description = "The CIDR range of the spoke1 subnetwork."
   type        = string
-  default     = null
+  default     = "10.2.0.0/28"
 }
 
 variable "spoke_vm_user" {
@@ -124,10 +123,10 @@ variable "spoke_vm_scopes" {
   ]
 }
 
-variable "create_vmseries_password" {
-  description = "Create a random password for the VM-Series firewall.  This password is not secure.  Never use this option for production environments.  mkpasswd must be installed on host executing the Terraform plan"
-  default     = false
-}
+# variable "create_vmseries_password" {
+#   description = "Create a random password for the VM-Series firewall.  This password is not secure.  Never use this option for production environments.  mkpasswd must be installed on host executing the Terraform plan"
+#   default     = false
+# }
 
 
 /*
