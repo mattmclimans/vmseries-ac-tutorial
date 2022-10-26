@@ -1,3 +1,7 @@
+# -------------------------------------------------------------------------------------
+# Required variables
+# -------------------------------------------------------------------------------------
+
 variable "project_id" {
   description = "GCP Project ID"
   type        = string
@@ -5,7 +9,7 @@ variable "project_id" {
 
 variable "public_key_path" {
   description = "Local path to public SSH key. To generate the key pair use `ssh-keygen -t rsa -C admin -N '' -f id_rsa`  If you do not have a public key, run `ssh-keygen -f ~/.ssh/demo-key -t rsa -C admin`"
-  default     = "~/.ssh/gcp-demo.pub"
+  type        = string
 }
 
 variable "mgmt_allow_ips" {
@@ -18,8 +22,11 @@ variable "region" {
   type        = string
 }
 
-# --------------------------------------------------------------------------------------------------------------------------------------------
 
+
+# -------------------------------------------------------------------------------------
+# Optional variables
+# -------------------------------------------------------------------------------------
 
 variable "vmseries_image_name" {
   description = "Name of the VM-Series image within the paloaltonetworksgcp-public project.  To list available images, run: `gcloud compute images list --project paloaltonetworksgcp-public --no-standard-images`. If you are using a custom image in a different project, please update `local.vmseries_iamge_url` in `main.tf`."
@@ -122,27 +129,3 @@ variable "spoke_vm_scopes" {
     "https://www.googleapis.com/auth/monitoring.write"
   ]
 }
-
-# variable "create_vmseries_password" {
-#   description = "Create a random password for the VM-Series firewall.  This password is not secure.  Never use this option for production environments.  mkpasswd must be installed on host executing the Terraform plan"
-#   default     = false
-# }
-
-
-/*
-## metadata example if bootstrapping to Panorama.
-  metadata = {
-    type                        = "dhcp-client"
-    op-command-modes            = "mgmt-interface-swap"
-    vm-auth-key                 = "878627735112242"
-    panorama-server             = "20.124.7.65"
-    dgname                      = "gcp-hub"
-    tplname                     = "gcp-hub_stack"
-    dhcp-send-hostname          = "yes"
-    dhcp-send-client-id         = "yes"
-    dhcp-accept-server-hostname = "yes"
-    dhcp-accept-server-domain   = "yes"
-    dns-primary                 = "169.254.169.254"
-    dns-secondary               = "8.8.8.8"
-  }
-*/

@@ -1,5 +1,6 @@
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# Create Spoke VPC networks
+# -------------------------------------------------------------------------------------
+# Create Spoke VPC networks.
+# -------------------------------------------------------------------------------------
 
 module "vpc_spoke1" {
   source                                 = "terraform-google-modules/network/google"
@@ -24,7 +25,6 @@ module "vpc_spoke1" {
       description       = "Default route to VM-Series NGFW"
       destination_range = "0.0.0.0/0"
       next_hop_ilb      = module.lb_internal.address
-      #tags             = "egress-inet"
     }
   ]
 
@@ -43,6 +43,7 @@ module "vpc_spoke1" {
     }
   ]
 }
+
 
 module "vpc_spoke2" {
   source                                 = "terraform-google-modules/network/google"
@@ -67,8 +68,6 @@ module "vpc_spoke2" {
       description       = "Default route to VM-Series NGFW"
       destination_range = "0.0.0.0/0"
       next_hop_ilb      = module.lb_internal.address
-      #next_hop_internet = "true"
-      #tags             = "egress-inet"
     }
   ]
 
@@ -90,44 +89,36 @@ module "vpc_spoke2" {
 
 
 
+# -------------------------------------------------------------------------------------
+# Create VPC peering connections between the trust and spoke networks.
+# -------------------------------------------------------------------------------------
 
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# Create VPC peering connections between spoke networks and the trust network
-
-resource "google_compute_network_peering" "spoke1_to_trust" {
-  count        = (var.create_spoke_networks ? 1 : 0)
-  name         = "${local.prefix}spoke1-to-trust"
-  network      = module.vpc_spoke1[0].network_id
-  peer_network = module.vpc_trust.network_id
-}
-
-resource "google_compute_network_peering" "trust_to_spoke1" {
-  count        = (var.create_spoke_networks ? 1 : 0)
-  name         = "${local.prefix}trust-to-spoke1"
-  network      = module.vpc_trust.network_id
-  peer_network = module.vpc_spoke1[0].network_id
+module "peering_spoke1" {
+  source                                    = "terraform-google-modules/network/google//modules/network-peering"
+  version                                   = "~> 5.2.0"
+  local_network                             = module.vpc_trust.network_id
+  peer_network                              = module.vpc_spoke1[0].network_id
+  export_local_subnet_routes_with_public_ip = false
 }
 
 
-resource "google_compute_network_peering" "spoke2_to_trust" {
-  count        = (var.create_spoke_networks ? 1 : 0)
-  name         = "${local.prefix}spoke2-to-trust"
-  network      = module.vpc_spoke2[0].network_id
-  peer_network = module.vpc_trust.network_id
-}
+module "peering_spoke2" {
+  source                                    = "terraform-google-modules/network/google//modules/network-peering"
+  version                                   = "~> 5.2.0"
+  local_network                             = module.vpc_trust.network_id
+  peer_network                              = module.vpc_spoke2[0].network_id
+  export_local_subnet_routes_with_public_ip = false
 
-resource "google_compute_network_peering" "trust_to_spoke2" {
-  count        = (var.create_spoke_networks ? 1 : 0)
-  name         = "${local.prefix}trust-to-spoke2"
-  network      = module.vpc_trust.network_id
-  peer_network = module.vpc_spoke2[0].network_id
+  module_depends_on = [
+    module.peering_spoke1.complete
+  ]
 }
 
 
 
-
-# --------------------------------------------------------------------------------------------------------------------------------------------
-# Create Spoke VM Ubuntu instances for testing inspection flows
+# ------------------------------------------------------------------------------------------------------------------------------------------------------
+# Create Spoke VM Ubuntu instances for testing inspection flows.
+# -------------------------------------------------------------------------------------
 
 resource "google_compute_instance" "spoke1_vm" {
   count                     = (var.create_spoke_networks ? 1 : 0)
@@ -157,6 +148,7 @@ resource "google_compute_instance" "spoke1_vm" {
     scopes = var.spoke_vm_scopes
   }
 }
+
 
 resource "google_compute_instance" "spoke2_vm1" {
   count                     = (var.create_spoke_networks ? 1 : 0)

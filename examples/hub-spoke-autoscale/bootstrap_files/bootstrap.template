@@ -75,7 +75,13 @@
       </report>
     </botnet>
     <admin-role/>
-    <application-status/>
+    <application-status>
+      <entry name="between-messenger" status="disabled"/>
+      <entry name="excel-messenger" status="disabled"/>
+      <entry name="paloalto-user-context" status="disabled"/>
+      <entry name="paloalto-ztna-agent" status="disabled"/>
+      <entry name="sick-sopas-webserver" status="disabled"/>
+    </application-status>
   </shared>
   <devices>
     <entry name="localhost.localdomain">
@@ -118,7 +124,7 @@
                 <dhcp-client>
                   <create-default-route>no</create-default-route>
                 </dhcp-client>
-                <interface-management-profile>allow-lb-checks</interface-management-profile>
+                <interface-management-profile>allow-ping</interface-management-profile>
                 <lldp>
                   <enable>no</enable>
                 </lldp>
@@ -134,7 +140,7 @@
                 <ip>
                   <entry name="100.64.0.1"/>
                 </ip>
-                <interface-management-profile>allow-lb-checks</interface-management-profile>
+                <interface-management-profile>allow-health-checks</interface-management-profile>
               </entry>
             </units>
           </loopback>
@@ -151,13 +157,16 @@
             <entry name="allow-ping">
               <ping>yes</ping>
             </entry>
-            <entry name="allow-lb-checks">
+            <entry name="allow-health-checks">
               <permitted-ip>
                 <entry name="35.191.0.0/16"/>
                 <entry name="130.211.0.0/22"/>
+                <entry name="209.85.152.0/22"/>
+                <entry name="209.85.204.0/22"/>
+                <entry name="169.254.169.254/32"/>
               </permitted-ip>
               <http>yes</http>
-              <ssh>yes</ssh>
+              <ssh>no</ssh>
             </entry>
           </interface-management-profile>
         </profiles>
@@ -324,6 +333,9 @@
               <algorithm>
                 <ip-modulo/>
               </algorithm>
+              <enable>yes</enable>
+              <symmetric-return>yes</symmetric-return>
+              <max-path>4</max-path>
             </ecmp>
             <protocol>
               <bgp>
@@ -352,14 +364,71 @@
             <routing-table>
               <ip>
                 <static-route>
-                  <entry name="health-probe-1">
+                  <entry name="rfc-a">
+                    <nexthop>
+                      <ip-address>${gateway_trust}</ip-address>
+                    </nexthop>
+                    <bfd>
+                      <profile>None</profile>
+                    </bfd>
+                    <path-monitor>
+                      <enable>no</enable>
+                      <failure-condition>any</failure-condition>
+                      <hold-time>2</hold-time>
+                    </path-monitor>
+                    <interface>ethernet1/2</interface>
+                    <metric>10</metric>
+                    <destination>10.0.0.0/8</destination>
+                    <route-table>
+                      <unicast/>
+                    </route-table>
+                  </entry>
+                  <entry name="rfc-b">
+                    <nexthop>
+                      <ip-address>${gateway_trust}</ip-address>
+                    </nexthop>
+                    <bfd>
+                      <profile>None</profile>
+                    </bfd>
+                    <path-monitor>
+                      <enable>no</enable>
+                      <failure-condition>any</failure-condition>
+                      <hold-time>2</hold-time>
+                    </path-monitor>
+                    <interface>ethernet1/2</interface>
+                    <metric>10</metric>
+                    <destination>172.16.0.0/12</destination>
+                    <route-table>
+                      <unicast/>
+                    </route-table>
+                  </entry>
+                  <entry name="rfc-c">
+                    <nexthop>
+                      <ip-address>${gateway_trust}</ip-address>
+                    </nexthop>
+                    <bfd>
+                      <profile>None</profile>
+                    </bfd>
+                    <path-monitor>
+                      <enable>no</enable>
+                      <failure-condition>any</failure-condition>
+                      <hold-time>2</hold-time>
+                    </path-monitor>
+                    <interface>ethernet1/2</interface>
+                    <metric>10</metric>
+                    <destination>192.168.0.0/16</destination>
+                    <route-table>
+                      <unicast/>
+                    </route-table>
+                  </entry>
+                  <entry name="probe-trust-1">
                     <path-monitor>
                       <enable>no</enable>
                       <failure-condition>any</failure-condition>
                       <hold-time>2</hold-time>
                     </path-monitor>
                     <nexthop>
-                      <ip-address>${trust_gateway}</ip-address>
+                      <ip-address>${gateway_trust}</ip-address>
                     </nexthop>
                     <bfd>
                       <profile>None</profile>
@@ -371,14 +440,14 @@
                       <unicast/>
                     </route-table>
                   </entry>
-                  <entry name="health-probe-2">
+                  <entry name="probe-trust-2">
                     <path-monitor>
                       <enable>no</enable>
                       <failure-condition>any</failure-condition>
                       <hold-time>2</hold-time>
                     </path-monitor>
                     <nexthop>
-                      <ip-address>${trust_gateway}</ip-address>
+                      <ip-address>${gateway_trust}</ip-address>
                     </nexthop>
                     <bfd>
                       <profile>None</profile>
@@ -390,59 +459,40 @@
                       <unicast/>
                     </route-table>
                   </entry>
-                  <entry name="rfc-a">
+                  <entry name="probe-untrust-1">
                     <path-monitor>
                       <enable>no</enable>
                       <failure-condition>any</failure-condition>
                       <hold-time>2</hold-time>
                     </path-monitor>
                     <nexthop>
-                      <ip-address>${trust_gateway}</ip-address>
+                      <ip-address>${gateway_untrust}</ip-address>
                     </nexthop>
                     <bfd>
                       <profile>None</profile>
                     </bfd>
-                    <interface>ethernet1/2</interface>
+                    <interface>ethernet1/1</interface>
                     <metric>10</metric>
-                    <destination>10.0.0.0/8</destination>
+                    <destination>35.191.0.0/16</destination>
                     <route-table>
                       <unicast/>
                     </route-table>
                   </entry>
-                  <entry name="rfc-b">
+                  <entry name="probe-untrust-2">
                     <path-monitor>
                       <enable>no</enable>
                       <failure-condition>any</failure-condition>
                       <hold-time>2</hold-time>
                     </path-monitor>
                     <nexthop>
-                      <ip-address>${trust_gateway}</ip-address>
+                      <ip-address>${gateway_untrust}</ip-address>
                     </nexthop>
                     <bfd>
                       <profile>None</profile>
                     </bfd>
-                    <interface>ethernet1/2</interface>
+                    <interface>ethernet1/1</interface>
                     <metric>10</metric>
-                    <destination>172.16.0.0/12</destination>
-                    <route-table>
-                      <unicast/>
-                    </route-table>
-                  </entry>
-                  <entry name="rfc-c">
-                    <path-monitor>
-                      <enable>no</enable>
-                      <failure-condition>any</failure-condition>
-                      <hold-time>2</hold-time>
-                    </path-monitor>
-                    <nexthop>
-                      <ip-address>${trust_gateway}</ip-address>
-                    </nexthop>
-                    <bfd>
-                      <profile>None</profile>
-                    </bfd>
-                    <interface>ethernet1/2</interface>
-                    <metric>10</metric>
-                    <destination>192.168.0.0/16</destination>
+                    <destination>130.211.0.0/22</destination>
                     <route-table>
                       <unicast/>
                     </route-table>
@@ -519,7 +569,7 @@
           <management>
             <hostname-type-in-syslog>FQDN</hostname-type-in-syslog>
             <initcfg>
-              <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FEQ0Y5T29TOURveFZ1WUlOTjY5b0RGcEZvWkJjN04xMCs5TzBMWVMxTHBKaWhRVXR0cTRvenNZS3I3U3ZVMHZCUHVrTFIwUzJ2RUoxTVpXdUQ4SEg3ckdMWGwvWjd5TStoZlhyNlAvZ2lHWit5L1dZQlBqa0tXVTN4UDBrVlBMMDZqWEd5bk5nUFpUazF5bk4zdktsRmE4VEVlSk05aW1HREZQMi8vYlNYY0JNUG1rbmIzbHVEeFpzZmR4eVBnRmpNbjV4Z0FDejBialZYVTgzbTFjQjVNYU1NemFzWFdzemVtdGhVWUpPNEt2TGZQbnFUQzhLbHNnZG1FRmIwS0lRd1E3bWRQWTNDRlZqUzNCeGRpWkdJa0h4ajhIMFpyK2s0Qm00NXlWdWxqMkJlSTBnZm1Fb0dtQWMvQmN6bXFrUHVoaTAra0VIRnJ2bjFHcEs2VVF2ZzNEVkxGZjRCVjUxL0hZa2VRR1FLMzJTTVZ4MzlhSXNIcnBwMStVdHlqamZ4blMxZkFvQlVWTWJvRUROMmpqbFdpQlV2bS83aDU3KzlQU2ttM1FqWXRhakFQUEplck5KWW02bm1WTk56UElJY2E4SkVsU3h1Zy94K2tZR2Vid3hiMVdsMVRMSHdJMXlXUWVwQTl1OWZCY0hlcUN0dEVISGxEdkpsNVpBVkFPOTg9IG1tY2xpbWFuc0Bjcy0xMDY5NDkwNTU2NjQtZGVmYXVsdA==</public-key>
+              <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FEWTVRMDk5WGhhK2EwL01wRDBFMmtvckF6Nk5DS2JpMmR4cG1tV3p2aEdhdnJDVzMyL2Q5UVY4OXlZOUNLZDJtSUF0bndvaWZ1bXJtaDlzRDZDMDBBSUNBNjQzdUZmVDg2RGdETDBxNVdaUmNMS0JUSHBzTDVPQ29MNXlKTjhMQmJRbWFxcXZFK0xpb3NBNWlyb29YcW5tUlBpSEtxUkdjVWpoa2pFY2luTHcyOG95UFI4WXpxL08rVUpUYXpSTXNVME9WMElsSEVGd3FiSVhPWmhDTDBWblJlSkkwZnZCak9HOUZkOXRxdG9BeHovNVhyZFM4MVdoelBtVk1sdTBXUjZ3SjhmTDJSWGdaMGFqWE5NMElJZEV0dURzQk1PMVlSOW9ZZ21SZ3RRejBOKzIvQlAwY0E0eHlvZmFvQ0RDMDJIS1lGcTRwQUNjYThVZWFKUDVYN2h0RHBIb0hhaW02cEVKSjJuMDNRRUlDdkJSMFhmWTZBYTVENmtyb0s2STl1czUzTTB3MnkzdDQvbjFUSXZPcG1tYlNmTEk2ckl0WG4xd04yUTRxZ3RPU0lXVnBXZWNqL2RmeWVWcGhwZS9FSEFSUUxkTTZZU2hTLytFdFJVME0rSCtUSWc5azhlQkN4MmZ3aDd5aWEySGRjdHpwY1dqL0NiWjhpa1E4NWI1Q0U9IG1tY2xpbWFuc0BNYXR0aGV3cy1NYWMtbWluaS5sb2NhbA==</public-key>
               <type>
                 <dhcp-client>
                   <send-hostname>yes</send-hostname>
@@ -684,7 +734,26 @@
                   <description>Inbound DNAT/SNAT policy to VM in spoke2.</description>
                   <to-interface>ethernet1/1</to-interface>
                 </entry>
-                <entry name="health-checks" uuid="27d811e9-479c-449e-aa05-270cf7adfcd1">
+                <entry name="health-check-extlb" uuid="27d811e9-479c-449e-aa05-270cf7adfcd1">
+                  <dynamic-destination-translation>
+                    <translated-address>loopback</translated-address>
+                  </dynamic-destination-translation>
+                  <to>
+                    <member>untrust</member>
+                  </to>
+                  <from>
+                    <member>untrust</member>
+                  </from>
+                  <source>
+                    <member>google-health-checks</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <service>any</service>
+                  <to-interface>ethernet1/1</to-interface>
+                </entry>
+                <entry name="health-check-intlb" uuid="c4b299ca-e365-4565-b84d-6ac0a8675bc7">
                   <dynamic-destination-translation>
                     <translated-address>loopback</translated-address>
                   </dynamic-destination-translation>
@@ -695,7 +764,7 @@
                     <member>trust</member>
                   </from>
                   <source>
-                    <member>google-probes</member>
+                    <member>google-health-checks</member>
                   </source>
                   <destination>
                     <member>any</member>
@@ -729,6 +798,41 @@
             </nat>
             <security>
               <rules>
+                <entry name="health-probe" uuid="650b505d-d106-4e15-b1fb-24f2baf88946">
+                  <to>
+                    <member>any</member>
+                  </to>
+                  <from>
+                    <member>any</member>
+                  </from>
+                  <source>
+                    <member>google-health-checks</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>web-browsing</member>
+                  </application>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <source-hip>
+                    <member>any</member>
+                  </source-hip>
+                  <destination-hip>
+                    <member>any</member>
+                  </destination-hip>
+                  <action>allow</action>
+                  <rule-type>universal</rule-type>
+                  <description>Security policy to allow load balancer health checks to verify VM-Series availability.</description>
+                </entry>
                 <entry name="inbound-web" uuid="d7873262-2090-4939-9ec9-5cf7c2ca50e1">
                   <to>
                     <member>trust</member>
@@ -962,41 +1066,6 @@
                     </profiles>
                   </profile-setting>
                 </entry>
-                <entry name="health-probe" uuid="650b505d-d106-4e15-b1fb-24f2baf88946">
-                  <to>
-                    <member>trust</member>
-                  </to>
-                  <from>
-                    <member>trust</member>
-                  </from>
-                  <source>
-                    <member>google-probes</member>
-                  </source>
-                  <destination>
-                    <member>any</member>
-                  </destination>
-                  <source-user>
-                    <member>any</member>
-                  </source-user>
-                  <category>
-                    <member>any</member>
-                  </category>
-                  <application>
-                    <member>any</member>
-                  </application>
-                  <service>
-                    <member>application-default</member>
-                  </service>
-                  <source-hip>
-                    <member>any</member>
-                  </source-hip>
-                  <destination-hip>
-                    <member>any</member>
-                  </destination-hip>
-                  <action>allow</action>
-                  <rule-type>universal</rule-type>
-                  <description>Security policy to allow Google load balancer health probes to the VM-Series.</description>
-                </entry>
                 <entry name="all-ping" uuid="3ac87aef-a4fd-4cad-841d-a55edd4f66a9">
                   <to>
                     <member>any</member>
@@ -1072,12 +1141,14 @@
               <tag>
                 <member>google-ip</member>
               </tag>
+              <description>Google HTTPS &amp; TCP load balancer health probe range.</description>
             </entry>
             <entry name="google-probe-2">
               <ip-netmask>130.211.0.0/22</ip-netmask>
               <tag>
                 <member>google-ip</member>
               </tag>
+              <description>Google HTTPS load balancer health probe range.</description>
             </entry>
             <entry name="spoke1-vm1">
               <ip-netmask>${spoke1_vm1_ip}</ip-netmask>
@@ -1104,6 +1175,27 @@
                 <member>internal-ip</member>
               </tag>
             </entry>
+            <entry name="google-probe-3">
+              <ip-netmask>209.85.152.0/22</ip-netmask>
+              <tag>
+                <member>google-ip</member>
+              </tag>
+              <description>Google TCP load balancer health probe range.</description>
+            </entry>
+            <entry name="google-probe-4">
+              <ip-netmask>209.85.204.0/22</ip-netmask>
+              <tag>
+                <member>google-ip</member>
+              </tag>
+              <description>Google TCP load balancer health probe range.</description>
+            </entry>
+            <entry name="google-metadata-server">
+              <ip-netmask>169.254.169.254</ip-netmask>
+              <tag>
+                <member>google-ip</member>
+              </tag>
+              <description>Target pool-based network load balancers might proxy health checks through the metadata server (169.254.169.254).</description>
+            </entry>
           </address>
           <tag>
             <entry name="untrust">
@@ -1120,14 +1212,18 @@
             </entry>
           </tag>
           <address-group>
-            <entry name="google-probes">
+            <entry name="google-health-checks">
               <static>
+                <member>google-metadata-server</member>
                 <member>google-probe-1</member>
                 <member>google-probe-2</member>
+                <member>google-probe-3</member>
+                <member>google-probe-4</member>
               </static>
               <tag>
                 <member>google-ip</member>
               </tag>
+              <description>Google TCP load balancer health probe range.</description>
             </entry>
           </address-group>
           <profiles>
