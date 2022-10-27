@@ -194,7 +194,7 @@ module "vmseries" {
   target_pool_self_links = [module.lb_external.target_pool]
   service_account_email  = module.iam_service_account.email
   autoscaler_metrics     = var.autoscaler_metrics
-
+  tags                   = ["vmseries-tutorial"]
   network_interfaces = [
     {
       subnetwork       = module.vpc_untrust.subnets_self_links[0]
