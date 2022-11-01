@@ -255,7 +255,7 @@ module "lb_external" {
   source                         = "PaloAltoNetworks/vmseries-modules/google//modules/lb_external"
   name                           = "${local.prefix}vmseries-external-lb"
   health_check_http_port         = 80
-  health_check_http_request_path = "/php/login.php"
+  health_check_http_request_path = "/"
 
   rules = {
     "rule1" = { all_ports = true }
