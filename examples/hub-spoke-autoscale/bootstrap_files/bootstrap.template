@@ -76,12 +76,63 @@
     </botnet>
     <admin-role/>
     <application-status>
+      <entry name="amazon-echo-conntest" status="disabled"/>
+      <entry name="amazon-fire-tablet-conntest" status="disabled"/>
+      <entry name="amazon-fire-tv-conntest" status="disabled"/>
       <entry name="between-messenger" status="disabled"/>
+      <entry name="brightsign-media-player" status="disabled"/>
+      <entry name="checkmk" status="disabled"/>
+      <entry name="chisel" status="disabled"/>
+      <entry name="dahua-p2p" status="disabled"/>
       <entry name="excel-messenger" status="disabled"/>
+      <entry name="giphy-base" status="disabled"/>
+      <entry name="giphy-creating" status="disabled"/>
+      <entry name="giphy-downloading" status="disabled"/>
+      <entry name="giphy-uploading" status="disabled"/>
+      <entry name="lontalk-base" status="disabled"/>
+      <entry name="lontalk-apdu" status="disabled"/>
+      <entry name="lontalk-auth-pdu" status="disabled"/>
+      <entry name="lontalk-spdu" status="disabled"/>
+      <entry name="lontalk-tpdu" status="disabled"/>
+      <entry name="net.tcp-deployment-service" status="disabled"/>
+      <entry name="nintendo-conntest" status="disabled"/>
+      <entry name="openadr-base" status="disabled"/>
+      <entry name="openadr-cancel-opt" status="disabled"/>
+      <entry name="openadr-cancel-party-reg" status="disabled"/>
+      <entry name="openadr-cancel-report" status="disabled"/>
+      <entry name="openadr-canceled-opt" status="disabled"/>
+      <entry name="openadr-canceled-party-reg" status="disabled"/>
+      <entry name="openadr-canceled-report" status="disabled"/>
+      <entry name="openadr-create-opt" status="disabled"/>
+      <entry name="openadr-create-party-reg" status="disabled"/>
+      <entry name="openadr-create-report" status="disabled"/>
+      <entry name="openadr-created-event" status="disabled"/>
+      <entry name="openadr-created-opt" status="disabled"/>
+      <entry name="openadr-created-party-reg" status="disabled"/>
+      <entry name="openadr-created-report" status="disabled"/>
+      <entry name="openadr-distribute-event" status="disabled"/>
+      <entry name="openadr-poll" status="disabled"/>
+      <entry name="openadr-query-registration" status="disabled"/>
+      <entry name="openadr-register-report" status="disabled"/>
+      <entry name="openadr-registered-report" status="disabled"/>
+      <entry name="openadr-request-event" status="disabled"/>
+      <entry name="openadr-request-reregistration" status="disabled"/>
+      <entry name="openadr-response" status="disabled"/>
+      <entry name="openadr-update-report" status="disabled"/>
+      <entry name="openadr-updated-report" status="disabled"/>
+      <entry name="paloalto-pa-acs" status="disabled"/>
+      <entry name="paloalto-suppt-case-base" status="disabled"/>
+      <entry name="paloalto-suppt-case-downloading" status="disabled"/>
+      <entry name="paloalto-suppt-case-uploading" status="disabled"/>
       <entry name="paloalto-user-context" status="disabled"/>
       <entry name="paloalto-ztna-agent" status="disabled"/>
+      <entry name="pixeldrain" status="disabled"/>
+      <entry name="psexec" status="disabled"/>
+      <entry name="rockwell-factorytalk-viewpoint" status="disabled"/>
       <entry name="sick-sopas-webserver" status="disabled"/>
+      <entry name="tubitv" status="disabled"/>
     </application-status>
+    <content-preview/>
   </shared>
   <devices>
     <entry name="localhost.localdomain">
@@ -519,7 +570,7 @@
               <recurring>
                 <hourly>
                   <at>5</at>
-                  <disable-new-content>yes</disable-new-content>
+                  <disable-new-content>no</disable-new-content>
                   <action>download-and-install</action>
                 </hourly>
               </recurring>
@@ -569,7 +620,7 @@
           <management>
             <hostname-type-in-syslog>FQDN</hostname-type-in-syslog>
             <initcfg>
-              <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FEWTVRMDk5WGhhK2EwL01wRDBFMmtvckF6Nk5DS2JpMmR4cG1tV3p2aEdhdnJDVzMyL2Q5UVY4OXlZOUNLZDJtSUF0bndvaWZ1bXJtaDlzRDZDMDBBSUNBNjQzdUZmVDg2RGdETDBxNVdaUmNMS0JUSHBzTDVPQ29MNXlKTjhMQmJRbWFxcXZFK0xpb3NBNWlyb29YcW5tUlBpSEtxUkdjVWpoa2pFY2luTHcyOG95UFI4WXpxL08rVUpUYXpSTXNVME9WMElsSEVGd3FiSVhPWmhDTDBWblJlSkkwZnZCak9HOUZkOXRxdG9BeHovNVhyZFM4MVdoelBtVk1sdTBXUjZ3SjhmTDJSWGdaMGFqWE5NMElJZEV0dURzQk1PMVlSOW9ZZ21SZ3RRejBOKzIvQlAwY0E0eHlvZmFvQ0RDMDJIS1lGcTRwQUNjYThVZWFKUDVYN2h0RHBIb0hhaW02cEVKSjJuMDNRRUlDdkJSMFhmWTZBYTVENmtyb0s2STl1czUzTTB3MnkzdDQvbjFUSXZPcG1tYlNmTEk2ckl0WG4xd04yUTRxZ3RPU0lXVnBXZWNqL2RmeWVWcGhwZS9FSEFSUUxkTTZZU2hTLytFdFJVME0rSCtUSWc5azhlQkN4MmZ3aDd5aWEySGRjdHpwY1dqL0NiWjhpa1E4NWI1Q0U9IG1tY2xpbWFuc0BNYXR0aGV3cy1NYWMtbWluaS5sb2NhbA==</public-key>
+              <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FDN3lqOWovZXlOZnBRRjB4MXlmc05HRHlpM3NRY0hKRk4ydlBqTW04MjFHcmRQRURyU1hlS0ZyQnVMSE5Sbk91c3lSNVZKRUd1aG55dy83emRtSDJDM1FyQ2RQU0JOYnl5L3VKeTZNSzBuYUJIWlVCKzAySlJJdEFxNWV2TnYrczZtM3lXVWgyb2RPVVhEYUVtOS82aXBVcXhmTXVISTBoNVNhcHdrTmg1cXNJVU5TR0U0ZUFsU2YrZzVYMmc3aU1jY2dOQ2lrSzd1Y294SEZTZmE0NmlYV1hGc2ZITEt3bkwyekZPdFhBd21QU1dBT3drVVR5M2hmN2hyZlRhNEJhQXdMb1duWGJhaERrUDc0cVNkc056U0NMNWJQdVFiU3pScW0rbkpneEErVUZtclUrZWs0RExKb2VMZFlCUndrRGgvK2RqbWFzNExyVmVBeGVEc05jblFibGsxYmEyOWNqeDloKzRJZ25xUXlrMnVncDBxYkdGVC96eThDc1VhelovWmJxeWlzT21wS2RXeHpJdHU2M3VuK0FEVTRiNWpmREZFRVpVQmUrRHA3TXdVSkk1c0lhUnBRbWNsdVBaMG5HbFl0RENHeDhnYWpKQzJQaEpMODM3djdDZ1o0cjdQQTRrVVVzWUlKcDdXOVhxbjZiNVRyWWJzSlgzWS9SS1hUY1U9IG1hdHRAY3MtODIwOTM1OTM4MjQwLWRlZmF1bHQ=</public-key>
               <type>
                 <dhcp-client>
                   <send-hostname>yes</send-hostname>
@@ -638,7 +689,7 @@
             <entry name="tcp-8080">
               <protocol>
                 <tcp>
-                  <port>80</port>
+                  <port>8080</port>
                   <override>
                     <no/>
                   </override>
@@ -674,8 +725,8 @@
                   <destination>
                     <member>any</member>
                   </destination>
-                  <service>service-http</service>
-                  <description>Inbound DNAT/SNAT policy to spoke1 internal LB for web server farm.</description>
+                  <service>tcp-8080</service>
+                  <description>Inbound DNAT/SNAT policy to spoke1 web VM.</description>
                   <to-interface>ethernet1/1</to-interface>
                 </entry>
                 <entry name="inbound-web" uuid="a9e71d77-b965-4794-a5ba-aa425baea956">
@@ -703,7 +754,7 @@
                     <member>any</member>
                   </destination>
                   <service>tcp-80</service>
-                  <description>Inbound DNAT/SNAT policy to spoke1 internal LB for web server farm.</description>
+                  <description>Inbound DNAT/SNAT policy to web VM.</description>
                   <to-interface>ethernet1/1</to-interface>
                 </entry>
                 <entry name="inbound-ssh" uuid="a3658b80-cb43-4129-b7e4-51b43962372c">
@@ -798,41 +849,6 @@
             </nat>
             <security>
               <rules>
-                <entry name="health-probe" uuid="650b505d-d106-4e15-b1fb-24f2baf88946">
-                  <to>
-                    <member>any</member>
-                  </to>
-                  <from>
-                    <member>any</member>
-                  </from>
-                  <source>
-                    <member>google-health-checks</member>
-                  </source>
-                  <destination>
-                    <member>any</member>
-                  </destination>
-                  <source-user>
-                    <member>any</member>
-                  </source-user>
-                  <category>
-                    <member>any</member>
-                  </category>
-                  <application>
-                    <member>web-browsing</member>
-                  </application>
-                  <service>
-                    <member>application-default</member>
-                  </service>
-                  <source-hip>
-                    <member>any</member>
-                  </source-hip>
-                  <destination-hip>
-                    <member>any</member>
-                  </destination-hip>
-                  <action>allow</action>
-                  <rule-type>universal</rule-type>
-                  <description>Security policy to allow load balancer health checks to verify VM-Series availability.</description>
-                </entry>
                 <entry name="inbound-web" uuid="d7873262-2090-4939-9ec9-5cf7c2ca50e1">
                   <to>
                     <member>trust</member>
@@ -912,7 +928,7 @@
                     <member>ssh</member>
                   </application>
                   <service>
-                    <member>application-default</member>
+                    <member>any</member>
                   </service>
                   <source-hip>
                     <member>any</member>
@@ -1065,6 +1081,41 @@
                       </virus>
                     </profiles>
                   </profile-setting>
+                </entry>
+                <entry name="health-probe" uuid="650b505d-d106-4e15-b1fb-24f2baf88946">
+                  <to>
+                    <member>any</member>
+                  </to>
+                  <from>
+                    <member>any</member>
+                  </from>
+                  <source>
+                    <member>google-health-checks</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>web-browsing</member>
+                  </application>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <source-hip>
+                    <member>any</member>
+                  </source-hip>
+                  <destination-hip>
+                    <member>any</member>
+                  </destination-hip>
+                  <action>allow</action>
+                  <rule-type>universal</rule-type>
+                  <description>Security policy to allow load balancer health checks to verify VM-Series availability.</description>
                 </entry>
                 <entry name="all-ping" uuid="3ac87aef-a4fd-4cad-841d-a55edd4f66a9">
                   <to>
