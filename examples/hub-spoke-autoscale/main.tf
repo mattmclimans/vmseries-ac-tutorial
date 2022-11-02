@@ -77,7 +77,7 @@ module "vpc_trust" {
   source                                 = "terraform-google-modules/network/google"
   version                                = "~> 4.0"
   project_id                             = var.project_id
-  network_name                           = "${local.prefix}trust-vpc"
+  network_name                           = "${local.prefix}hub-vpc"
   routing_mode                           = "GLOBAL"
   delete_default_internet_gateway_routes = true
 
@@ -167,6 +167,7 @@ module "bootstrap" {
     "bootstrap_files/content/panupv2-all-contents-8622-7593"     = "content/panupv2-all-contents-8622-7593"
     "bootstrap_files/content/panup-all-antivirus-4222-4735"      = "content/panup-all-antivirus-4222-4735"
     "bootstrap_files/content/panupv3-all-wildfire-703414-706774" = "content/panupv3-all-wildfire-703414-706774"
+    "bootstrap_files/authcodes"                                  = "license/authcodes"
   }
 }
 
