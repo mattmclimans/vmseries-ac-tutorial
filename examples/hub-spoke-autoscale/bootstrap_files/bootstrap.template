@@ -873,7 +873,6 @@
                   </application>
                   <service>
                     <member>service-http</member>
-                    <member>service-https</member>
                   </service>
                   <source-hip>
                     <member>any</member>
