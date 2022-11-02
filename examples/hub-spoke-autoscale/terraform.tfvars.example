@@ -12,4 +12,3 @@ cidr_trust                  = "10.0.2.0/28"
 cidr_spoke1                 = "10.1.0.0/28"
 cidr_spoke2                 = "10.2.0.0/28"
 create_spoke_networks       = true
-
